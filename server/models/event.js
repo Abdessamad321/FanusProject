@@ -32,7 +32,6 @@ const eventSchema = new mongoose.Schema(
     },
     remaining_places: {
       type: Number,
-      required: true,
     },
   },
   { timestamps: true }
