@@ -4,7 +4,7 @@ const userValidation = require("../middlewares/validations");
 const bcrypt = require("bcrypt");
 const xss = require("xss");
 const jwt = require("jsonwebtoken");
-require('dotenv').config();
+require("dotenv").config();
 const secretKey = process.env.TOKEN_KEY;
 const refreshKey = process.env.REFRESH_KEY;
 
@@ -113,17 +113,19 @@ async function loginUser(req, res) {
 
 async function updateUser(req, res) {
   const userId = req.params.id;
-  const { name, phone, email, nationality, password} = req.body;
+  const { name, phone, email, nationality } = req.body;
 
   try {
     const user = await User.findByIdAndUpdate(userId, {
-      name, phone, email, nationality
+      name,
+      phone,
+      email,
+      nationality,
     });
 
     if (!user) {
       throw new Error("No such User");
     } else {
-      user.active = true;
       res.status(200).json("User updated successfully");
     }
   } catch (error) {
@@ -131,18 +133,52 @@ async function updateUser(req, res) {
   }
 }
 
+// async function updateIdUser(req, res) {
+//   const userId = req.params.id;
+//   const { old_password, new_password, name, email } = req.body;
+
+//   const photo = req.file ? req.file.path : null;
+
+//   try {
+//     const user = await User.findById(userId);
+
+//     const isPasswordValid = await bcrypt.compare(
+//       old_password,
+//       user.password
+//     );
+
+//     if (!isPasswordValid) {
+//       return res.status(401).json({ error: "Invalid old password" });
+//     }
+
+//     const hashedNewPassword = await bcrypt.hash(new_password, 10);
+//     user.photo = photo;
+//     user.name = name;
+//     user.email = email;
+//     user.password = hashedNewPassword;
+
+//     await user.save();
+
+//     res.json(user);
+//     console.log(user);
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// }
+
 async function deleteUser(req, res) {
   const token = req.headers.authorization.split(" ")[1];
   try {
     const decodedToken = jwt.verify(token, secretKey);
-    const userId = decodedToken.id;
-    const deletedUser = await User.findByIdAndRemove(userId);
+    const userId = decodedToken.userId;
+    const deletedUser = await User.findByIdAndDelete(userId);
     if (deletedUser) {
       res.json(`User with ID ${userId} deleted successfully`);
     } else {
       res.status(404).json(`User with ID ${userId} not found`);
     }
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: error });
   }
 }
@@ -151,5 +187,6 @@ module.exports = {
   createUser: createUser,
   loginUser: loginUser,
   updateUser: updateUser,
-  deleteUser: deleteUser
+  // updateIdUser: updateIdUser,
+  deleteUser: deleteUser,
 };

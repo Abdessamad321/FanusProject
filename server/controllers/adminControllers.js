@@ -92,13 +92,40 @@ async function loginAdmin (req, res){
     
 }
 
+// async function updateAdmin(req, res) {
+//   const adminId = req.params.id;
+//   const { name, email, phone, password } = req.body;
+//   let updateData = { name, email, phone, password };
+
+//   try {
+//     const admin = await Admin.findByIdAndUpdate(adminId, updateData);
+
+//     if (admin) {
+//       res.status(200).json({ message: 'Admin updated successfully' });
+//     } else {
+//       res.status(404).json({ error: 'No admin found with the provided Id' });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: 'Internal server error' });
+//   }
+// }
+
 async function updateAdmin(req, res) {
   const adminId = req.params.id;
   const { name, email, phone, password } = req.body;
+  const realName = xss(name);
+  const realEmail = xss(email);
+  const realPhone = xss(phone);
+  const realPass = xss(password);
 
-  const validationErrors = adminValidation.validateAdmin(name, phone, email, password);
+  const validationErrors = adminValidation.validateAdmin(
+    realName,
+    realEmail,
+    realPhone,
+    realPass
+  );
   if (validationErrors.length > 0) {
-    return res.status(400).json({ errors: validationErrors });
+    return res.status(400).json({ err: validationErrors });
   }
 
   const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
@@ -109,7 +136,7 @@ async function updateAdmin(req, res) {
   }
 
   try {
-    const admin = await  Admin.findByIdAndUpdate(adminId, updateData, { new: true });
+    const admin = await Admin.findByIdAndUpdate(adminId, updateData, { new: true });
     if (admin) {
       res.status(200).json({ message: 'Admin updated successfully', admin });
     } else {
