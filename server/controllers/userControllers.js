@@ -78,7 +78,7 @@ async function loginUser(req, res) {
     const realPass = xss(password);
     console.log(email, password);
 
-    // SEARCHING THE Customer AND COMPARE
+    // SEARCHING THE User AND COMPARE
 
     const checkUser = await User.findOne({ email: realEmail });
 
@@ -88,7 +88,7 @@ async function loginUser(req, res) {
 
     // GENERATING A TOKEN
     const token = jwt.sign(
-      { userid: checkUser._id, isDeleted: checkUser.isDeleted },
+      { userId: checkUser._id, isDeleted: checkUser.isDeleted },
       secretKey,
       {
         expiresIn: "1h",
@@ -111,7 +111,45 @@ async function loginUser(req, res) {
   }
 }
 
+async function updateUser(req, res) {
+  const userId = req.params.id;
+  const { name, phone, email, nationality, password} = req.body;
+
+  try {
+    const user = await User.findByIdAndUpdate(userId, {
+      name, phone, email, nationality
+    });
+
+    if (!user) {
+      throw new Error("No such User");
+    } else {
+      user.active = true;
+      res.status(200).json("User updated successfully");
+    }
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+}
+
+async function deleteUser(req, res) {
+  const token = req.headers.authorization.split(" ")[1];
+  try {
+    const decodedToken = jwt.verify(token, secretKey);
+    const userId = decodedToken.id;
+    const deletedUser = await User.findByIdAndRemove(userId);
+    if (deletedUser) {
+      res.json(`User with ID ${userId} deleted successfully`);
+    } else {
+      res.status(404).json(`User with ID ${userId} not found`);
+    }
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+}
+
 module.exports = {
   createUser: createUser,
   loginUser: loginUser,
+  updateUser: updateUser,
+  deleteUser: deleteUser
 };
