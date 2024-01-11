@@ -2,7 +2,7 @@ const express = require("express");
 const xss = require("xss");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const admin = require("../models/admin");
+const Admin = require("../models/admin");
 const adminValidation = require("../middlewares/validations");
 require('dotenv').config();
 const secretKey = process.env.TOKEN_KEY;
@@ -36,13 +36,13 @@ async function createAdmin(req, res) {
             console.log(err);
             return res.status(500).json({ err: "Internal server error" });
           } else {
-            const existingAdmin = await admin.findOne({ email: realEmail });
+            const existingAdmin = await Admin.findOne({ email: realEmail });
             if (existingAdmin) {
               return res
                 .status(400)
                 .json({ err: "Email is already in use, try something else" });
             } else {
-              const newAdmin = await admin.create({
+              const newAdmin = await Admin.create({
                 name: realName,
                 email: realEmail,
                 phone: realPhone,
@@ -65,7 +65,7 @@ async function loginAdmin (req, res){
         const {email, password}= req.body;
         const realEmail = xss(email);
         const realPass = xss(password);
-        const checkAdmin = await admin.findOne({email: realEmail})
+        const checkAdmin = await Admin.findOne({email: realEmail})
         if (!checkAdmin) {
             return res.status(401).json('invalid credentials')
         }else{
@@ -93,7 +93,7 @@ async function loginAdmin (req, res){
 }
 
 async function updateAdmin(req, res) {
-  const userId = req.params.id;
+  const adminId = req.params.id;
   const { name, email, phone, password } = req.body;
 
   const validationErrors = adminValidation.validateAdmin(name, phone, email, password);
@@ -109,11 +109,11 @@ async function updateAdmin(req, res) {
   }
 
   try {
-    const user = await  Admin.findByIdAndUpdate(userId, updateData, { new: true });
-    if (user) {
-      res.status(200).json({ message: 'User updated successfully', user });
+    const admin = await  Admin.findByIdAndUpdate(adminId, updateData, { new: true });
+    if (admin) {
+      res.status(200).json({ message: 'Admin updated successfully', admin });
     } else {
-      res.status(404).json({ error: 'No user found with the provided Id' });
+      res.status(404).json({ error: 'No admin found with the provided Id' });
     }
   } catch (error) {
     console.error(error);
@@ -121,8 +121,22 @@ async function updateAdmin(req, res) {
   }
 }
 
+async function deleteAdmin(req, res){
+  const adminId = req.params.id;
+  try {
+      const admin = await Admin.findByIdAndDelete(adminId);
+      if (admin) {
+          res.status(200).json('admin deleted successfully');
+      }else{
+          res.status(404).json("no admin found with the provided Id")
+      };
+  } catch (error) {
+      res.json(error)
+  }
+}
 module.exports = {
   createAdmin: createAdmin,
   loginAdmin: loginAdmin,
-  updateAdmin: updateAdmin
+  updateAdmin: updateAdmin,
+  deleteAdmin: deleteAdmin
 };
