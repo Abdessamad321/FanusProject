@@ -4,11 +4,14 @@ const userValidation = require("../middlewares/validations");
 const bcrypt = require("bcrypt");
 const xss = require("xss");
 const jwt = require("jsonwebtoken");
+require('dotenv').config();
+const secretKey = process.env.TOKEN_KEY;
+const refreshKey = process.env.REFRESH_KEY;
 
 // create user logic ==============================
 
 async function createUser(req, res) {
-  const { name, phone, role, email, nationality, password } = req.body;
+  const { name, phone, email, nationality, password } = req.body;
   const realName = xss(name);
   const realPhone = xss(phone);
   const realEmail = xss(email);
@@ -19,7 +22,6 @@ async function createUser(req, res) {
   const validationErrors = userValidation.validateUser(
     realName,
     realPhone,
-    role,
     realEmail,
     realNationality,
     realPass
@@ -40,7 +42,7 @@ async function createUser(req, res) {
             return res.status(500).json({ err: "Internal server error" });
           } else {
             const existingUser = await User.findOne({
-              email: realEmail
+              email: realEmail,
             });
             if (existingUser) {
               return res
@@ -51,7 +53,6 @@ async function createUser(req, res) {
               const newUser = new User({
                 name: realName,
                 phone: realPhone,
-                role: role,
                 email: realEmail,
                 nationality: realNationality,
                 password: hash,
@@ -70,9 +71,47 @@ async function createUser(req, res) {
   }
 }
 
+async function loginUser(req, res) {
+  try {
+    const { email, password } = req.body;
+    const realEmail = xss(email);
+    const realPass = xss(password);
+    console.log(email, password);
 
+    // SEARCHING THE Customer AND COMPARE
 
+    const checkUser = await User.findOne({ email: realEmail });
+
+    if (!checkUser || !(await bcrypt.compare(realPass, checkUser.password))) {
+      return res.status(401).json({ error: "Invalid credentials" });
+    }
+
+    // GENERATING A TOKEN
+    const token = jwt.sign(
+      { userid: checkUser._id, isDeleted: checkUser.isDeleted },
+      secretKey,
+      {
+        expiresIn: "1h",
+      }
+    );
+    const refreshToken = jwt.sign({ id: checkUser.id }, refreshKey, {
+      expiresIn: "60s",
+    });
+    console.log(token);
+    console.log(refreshToken);
+    return res.status(200).json({
+      access_token: token,
+      token_type: "jwt",
+      expires_in: "1h",
+      refresh_token: refreshToken,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error });
+  }
+}
 
 module.exports = {
   createUser: createUser,
+  loginUser: loginUser,
 };

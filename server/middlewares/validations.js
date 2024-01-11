@@ -22,7 +22,7 @@ function validateAdmin(name, email, phone, password) {
   return errors;
 }
 
-function validateUser(name, phone, role, email, nationality, password) {
+function validateUser(name, phone, email, nationality, password) {
   const errors = [];
 
   if (!name || !name.match(/^[A-Za-z ]+$/)) {
@@ -33,10 +33,6 @@ function validateUser(name, phone, role, email, nationality, password) {
     errors.push(
       "Enter your phone; only numbers, spaces, '+', and '-' allowed."
     );
-  }
-
-  if (!role || !role.match(/^[A-Za-z0-9_]+$/)) {
-    errors.push("Invalid role.");
   }
 
   if (
