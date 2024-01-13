@@ -18,13 +18,14 @@ async function connected() {
   } catch (error) {
     console.log(error);
   }
+}
   connected();
 
 
   
 
-  const event = require ('./routes/eventRoutes')
-  app.use("/fanus", event)
+const event = require ('./routes/eventRoutes')
+app.use("/fanus", event)
   
 const user = require("./routes/userRoutes");
 app.use("/fanus", user);
@@ -38,4 +39,4 @@ mongoose.connection.on("connected", () => {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-});
+})

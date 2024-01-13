@@ -18,7 +18,7 @@ exports.createEvent = async function (req, res) {
     const existingEvent = await Event.findOne({ date, time, location });
 
     if (existingEvent) {
-      return res.status(200).json("Location already reserved for the same date and time!");
+   return res.status(200).json("Location already reserved for the same date and time!");
     }
 
     const event = new Event({
@@ -35,34 +35,69 @@ exports.createEvent = async function (req, res) {
     const result = await event.save();
 
     if (result) {
-      return res.status(201).json("Event created successfully");
+    res.status(200).json("Event created successfully");
     } else {
-      return res.status(400).json("Failed to create event! Please check your input data");
+    res.status(400).json("Failed to create event! Please check your input data");
     }
 
   } catch (error) {
- 
-    return res.status(500).json("Something went wrong, please try again");
+    res.status(500).json({error:error});
   }
 };
 
-
-exports.searchEvent= async function (req, res){
-
-};
-
 exports.eventById= async function (req, res){
-
+  const eventId = req.params.id;
+  try {
+  const event = await Event.findById(eventId);
+if(event){
+  res.status(200).json(event);
+}else{
+    res.status(404).json(`Event with this ID ${eventId} not found`)
+    throw error
+  }
+  
+} catch (error) {
+  res.status(500).json({error:error});
+}
 };
 
 exports.allEvent= async function (req, res){
-
+try {
+  const events = await Event.find();
+  res.status(200).json(events);
+  if(!events){
+    return res.status(404).json('No Events Found')
+  }
+} catch (error) {
+  res.status(500).json({error:error});
+}
 };
 
 exports.updateEvent= async function (req, res){
-
+  try {
+    const { id } = req.params;
+    const { body } = req;
+    const event = await Event.findById(id);
+    if (!event){
+      return res.status(404).json("Event not found")
+    }
+    await Event.updateOne({ _id: id }, { $set: body });
+    res.status(200).json("Event updated successfully");
+  } catch (error) {
+    res.status(500).json({error:error});
+  }
 };
 
 exports.deleteEvent= async function (req, res){
-
+try {
+  const { id } = req.params;
+  const event = await Event.findById(id);
+  if (!event){
+    return res.status(404).json("Event not found")
+  }
+  await event.deleteOne()
+  res.status(200).json("Event deleted successfully");
+} catch (error) {
+  res.status(500).json({error:error});
+}
 }
