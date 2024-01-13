@@ -119,12 +119,12 @@ async function getAdminId(req, res) {
 //     const admin = await Admin.findByIdAndUpdate(adminId, updateData);
 
 //     if (admin) {
-//       res.status(200).json({ message: 'Admin updated successfully' });
+//       res.status(200).json({ message: "Admin updated successfully" });
 //     } else {
-//       res.status(404).json({ error: 'No admin found with the provided Id' });
+//       res.status(404).json({ error: "No admin found with the provided Id" });
 //     }
 //   } catch (error) {
-//     res.status(500).json({ error: 'Internal server error' });
+//     res.status(500).json({ error: "Internal server error" });
 //   }
 // }
 
@@ -182,10 +182,36 @@ async function deleteAdmin(req, res) {
   }
 }
 
+// async function setNewPass (req, res) {
+//   const { token } = req.params;
+//   const { newPassword } = req.body;
+
+//   try {
+//       const admin = await Admin.findOne({
+//       resetToken: token,
+//       resetTokenExpiration: { $gt: Date.now() },
+//       });
+//       if (!admin) {
+//           return res.status(400).json({ message: 'Invalid or expired token' });
+//       }
+//       const hashedPass = await bcrypt.hash(newPassword, 10);
+//       admin.password = hashedPass;
+//       admin.resetToken = null;
+//       admin.resetTokenExpiration = null;
+//       await admin.save();
+
+//       return res.status(200).json({ message: 'Password updated successfully' });
+//   } catch (error) {
+//       console.error(error);
+//       return res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+
 module.exports = {
   createAdmin: createAdmin,
   loginAdmin: loginAdmin,
   getAdminId: getAdminId,
   updateAdmin: updateAdmin,
   deleteAdmin: deleteAdmin,
+  // setNewPass: setNewPass,
 };

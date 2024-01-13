@@ -12,4 +12,6 @@ router.put('/admin/:id', adminControllers.updateAdmin);
 
 router.delete('/admin/:id', adminControllers.deleteAdmin);
 
+// router.post('/admin/password/reset/:token', adminControllers.setNewPass)
+
 module.exports = router;

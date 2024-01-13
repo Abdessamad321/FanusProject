@@ -59,7 +59,7 @@ async function createUser(req, res) {
                 photo: photo,
               });
               await newUser.save();
-              res.status(200).json("User created success");
+              res.status(200).json("User created successfully");
             }
           }
         });
@@ -111,6 +111,60 @@ async function loginUser(req, res) {
   }
 }
 
+async function validationUser(req, res) {
+  const userid = req.params.id;
+  try {
+    const user = await User.findById(userid);
+    if (!user) {
+      throw new Error("No such Customer");
+    } else {
+      if (user._id) {
+        user.valid_account = true;
+        user.save();
+      }
+    }
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+}
+
+async function profileUser(req, res) {
+  const token =
+    req.headers.authorization && req.headers.authorization.split(" ")[1];
+  try {
+    jwt.verify(token, secretKey, async (err, decoded) => {
+      if (err) {
+        return res.send("Invalid Token");
+      } else {
+        const userid = decoded.userId;
+        const user = await User.findById(userid, {
+          password: 0,
+          valid_account: 0,
+        });
+        if (user) {
+          user.valid_account = true;
+          console.log(user);
+          res.json(user);
+        } else {
+          res.status(404).json({ error: "user not found" });
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    console.log(error)
+  }
+}
+
+async function getUserId(req, res) {
+  try {
+    const user = await User.findById(req.params.id);
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+}
+
 async function updateUser(req, res) {
   const userId = req.params.id;
   const { name, phone, email, nationality } = req.body;
@@ -133,38 +187,40 @@ async function updateUser(req, res) {
   }
 }
 
-// async function updateIdUser(req, res) {
-//   const userId = req.params.id;
-//   const { old_password, new_password, name, email } = req.body;
+async function updateIdUser(req, res) {
+  const userId = req.params.id;
+  const { old_password, new_password, name, phone, email, nationality } = req.body;
 
-//   const photo = req.file ? req.file.path : null;
+  const photo = req.file ? req.file.path : null;
 
-//   try {
-//     const user = await User.findById(userId);
+  try {
+    const user = await User.findById(userId);
 
-//     const isPasswordValid = await bcrypt.compare(
-//       old_password,
-//       user.password
-//     );
+    const isPasswordValid = await bcrypt.compare(
+      old_password,
+      user.password
+    );
 
-//     if (!isPasswordValid) {
-//       return res.status(401).json({ error: "Invalid old password" });
-//     }
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid old password" });
+    }
 
-//     const hashedNewPassword = await bcrypt.hash(new_password, 10);
-//     user.photo = photo;
-//     user.name = name;
-//     user.email = email;
-//     user.password = hashedNewPassword;
+    const hashedNewPassword = await bcrypt.hash(new_password, 10);
+    user.photo = photo;
+    user.name = name;
+    user.phone = phone;
+    user.email = email;
+    user.nationality = nationality;
+    user.password = hashedNewPassword;
 
-//     await user.save();
-
-//     res.json(user);
-//     console.log(user);
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// }
+    await user.save();
+    user.valid_account = true;
+    res.json(user);
+    console.log(user);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+}
 
 async function deleteUser(req, res) {
   const token = req.headers.authorization.split(" ")[1];
@@ -183,10 +239,15 @@ async function deleteUser(req, res) {
   }
 }
 
+
+
 module.exports = {
   createUser: createUser,
   loginUser: loginUser,
+  validationUser: validationUser,
+  getUserId:getUserId,
   updateUser: updateUser,
-  // updateIdUser: updateIdUser,
+  updateIdUser: updateIdUser,
   deleteUser: deleteUser,
+  profileUser: profileUser
 };
