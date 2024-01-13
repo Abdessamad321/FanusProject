@@ -18,12 +18,13 @@ async function connected() {
   }
 }
 connected();
-
 const user = require("./routes/userRoutes");
 app.use("/fanus", user);
-
 const admin = require("./routes/adminRoutes");
 app.use("/fanus", admin);
+//Reservation  Routes 
+const reservation = require("./routes/reservationRoutes");
+app.use('/reservation', reservation);
 
 mongoose.connection.on("connected", () => {
   console.log(`Connected`);
@@ -31,3 +32,5 @@ mongoose.connection.on("connected", () => {
     console.log(`Server is running on port ${PORT}`);
   });
 });
+
+
