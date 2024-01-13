@@ -73,6 +73,23 @@ try {
 }
 };
 
+exports.searchEvent = async function (req, res) {
+  try {
+    const eventName = req.query.name;
+    const events = await Event.find({name:{$regex:eventName, $options:"i"}})
+
+    if (events.length>0) {
+      res.status(200).json({ events });
+    } else  {
+      return res.status(400).json("No event found !");
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 exports.updateEvent= async function (req, res){
   try {
     const { id } = req.params;
