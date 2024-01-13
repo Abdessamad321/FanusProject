@@ -11,7 +11,6 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: true,
       unique: true,
     },
     email: {
@@ -25,10 +24,13 @@ const userSchema = new mongoose.Schema(
     },
     nationality: {
       type: String,
-      required: true,
     },
     photo: {
       type: String,
+    },
+    isDeleted:{
+      type: Boolean,
+      default: false
     },
   },
   { timestamps: true }
