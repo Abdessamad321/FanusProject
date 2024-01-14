@@ -20,19 +20,19 @@ async function connected() {
     console.log(error);
   }
 }
-  connected();
-
-
+connected();
   
 
 const event = require ('./routes/eventRoutes')
 app.use("/fanus", event)
-  
+
 const user = require("./routes/userRoutes");
 app.use("/fanus", user);
-
 const admin = require("./routes/adminRoutes");
 app.use("/fanus", admin);
+//Reservation  Routes 
+const reservation = require("./routes/reservationRoutes");
+app.use('/reservation', reservation);
 
 
 mongoose.connection.on("connected", () => {
@@ -40,4 +40,5 @@ mongoose.connection.on("connected", () => {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
-})
+});
+
