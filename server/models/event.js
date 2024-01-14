@@ -12,7 +12,7 @@ const eventSchema = new mongoose.Schema(
       type: String,
     },
     date: {
-      type: Date,
+      type: String,
       required: true,
     },
     time: {
@@ -37,6 +37,4 @@ const eventSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Event = mongoose.model("Event", eventSchema);
-
-module.exports = Event;
+module.exports ={ Event:mongoose.model("Event", eventSchema)} ;
