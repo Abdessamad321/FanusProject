@@ -86,7 +86,7 @@ async function loginAdmin(req, res) {
         return res.status(200).json({
           access_token: token,
           token_type: "jwt",
-          expires_in: "90s",
+          expires_in: "1h",
           refresh_token: refreshToken,
         });
       }

@@ -8,8 +8,6 @@ require("dotenv").config();
 const secretKey = process.env.TOKEN_KEY;
 const refreshKey = process.env.REFRESH_KEY;
 
-// create user logic ==============================
-
 async function createUser(req, res) {
   const { name, phone, email, nationality, password } = req.body;
   const realName = xss(name);
@@ -60,6 +58,7 @@ async function createUser(req, res) {
               });
               await newUser.save();
               res.status(200).json("User created successfully");
+              // res.redirect("login");
             }
           }
         });
@@ -152,7 +151,7 @@ async function profileUser(req, res) {
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
-    console.log(error)
+    console.log(error);
   }
 }
 
@@ -189,17 +188,15 @@ async function updateUser(req, res) {
 
 async function updateIdUser(req, res) {
   const userId = req.params.id;
-  const { old_password, new_password, name, phone, email, nationality } = req.body;
+  const { old_password, new_password, name, phone, email, nationality } =
+    req.body;
 
   const photo = req.file ? req.file.path : null;
 
   try {
     const user = await User.findById(userId);
 
-    const isPasswordValid = await bcrypt.compare(
-      old_password,
-      user.password
-    );
+    const isPasswordValid = await bcrypt.compare(old_password, user.password);
 
     if (!isPasswordValid) {
       return res.status(401).json({ error: "Invalid old password" });
@@ -234,20 +231,18 @@ async function deleteUser(req, res) {
       res.status(404).json(`User with ID ${userId} not found`);
     }
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({ error: error });
   }
 }
-
-
 
 module.exports = {
   createUser: createUser,
   loginUser: loginUser,
   validationUser: validationUser,
-  getUserId:getUserId,
+  getUserId: getUserId,
   updateUser: updateUser,
   updateIdUser: updateIdUser,
   deleteUser: deleteUser,
-  profileUser: profileUser
+  profileUser: profileUser,
 };
