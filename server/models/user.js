@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
+    valid_account: {
+      type: Boolean,
+      default: false,
+    }
   },
   { timestamps: true }
 );
