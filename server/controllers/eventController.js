@@ -1,7 +1,7 @@
 const { Event } = require("../models/event");
 const mongoose = require("mongoose");
 
-
+// Xss+regular validations expressions
 exports.createEvent = async function (req, res) {
   try {
     const {
@@ -73,6 +73,8 @@ try {
 }
 };
 
+//Sort req.query
+// limit
 exports.searchEvent = async function (req, res) {
   try {
     const eventName = req.query.name;
