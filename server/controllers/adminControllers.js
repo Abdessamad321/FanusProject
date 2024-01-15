@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const Admin = require("../models/admin");
 const adminValidation = require("../middlewares/validations");
-require('dotenv').config();
+require("dotenv").config();
 const secretKey = process.env.TOKEN_KEY;
 const refreshKey = process.env.REFRESH_KEY;
 
@@ -60,36 +60,54 @@ async function createAdmin(req, res) {
   }
 }
 
-async function loginAdmin (req, res){
-    try {
-        const {email, password}= req.body;
-        const realEmail = xss(email);
-        const realPass = xss(password);
-        const checkAdmin = await Admin.findOne({email: realEmail})
-        if (!checkAdmin) {
-            return res.status(401).json('invalid credentials')
-        }else{
-            const passwordMatch = await bcrypt.compare(realPass, checkAdmin.password)
-                if (!passwordMatch ) {
-                    return res.status(401).json('invalid credentials')
-                }else{
-                    const token = jwt.sign( {adminId: checkAdmin.id, email: checkAdmin.email}, secretKey, {expiresIn: '24h'});
-                    const refreshToken = jwt.sign({adminId: checkAdmin.id}, refreshKey, {expiresIn: '500h'});
-                    await checkAdmin.save();
-                    console.log(token)
-                    return res.status(200).json(
-                        {
-                            "access_token": token,
-                            "token_type": "jwt",
-                            "expires_in": "90s",
-                            "refresh_token": refreshToken,
-                        })
-                }    
-        }
-    } catch (error) {
-        res.status(500).json({err:error.message})
+async function loginAdmin(req, res) {
+  try {
+    const { email, password } = req.body;
+    const realEmail = xss(email);
+    const realPass = xss(password);
+    const checkAdmin = await Admin.findOne({ email: realEmail });
+    if (!checkAdmin) {
+      return res.status(401).json("invalid credentials");
+    } else {
+      const passwordMatch = await bcrypt.compare(realPass, checkAdmin.password);
+      if (!passwordMatch) {
+        return res.status(401).json("invalid credentials");
+      } else {
+        const token = jwt.sign(
+          { adminId: checkAdmin.id, email: checkAdmin.email },
+          secretKey,
+          { expiresIn: "24h" }
+        );
+        const refreshToken = jwt.sign({ adminId: checkAdmin.id }, refreshKey, {
+          expiresIn: "500h",
+        });
+        await checkAdmin.save();
+        console.log(token);
+        return res.status(200).json({
+          access_token: token,
+          token_type: "jwt",
+          expires_in: "1h",
+          refresh_token: refreshToken,
+        });
+      }
     }
-    
+  } catch (error) {
+    res.status(500).json({ err: error.message });
+  }
+}
+
+async function getAdminId(req, res) {
+  const adminid = req.params.id;
+  try {
+    const getamdin = await Admin.findById(adminid);
+    if (getamdin) {
+      res.status(200).json(getamdin);
+    } else {
+      res.status(404).json({ message: "Admin not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 }
 
 // async function updateAdmin(req, res) {
@@ -101,12 +119,12 @@ async function loginAdmin (req, res){
 //     const admin = await Admin.findByIdAndUpdate(adminId, updateData);
 
 //     if (admin) {
-//       res.status(200).json({ message: 'Admin updated successfully' });
+//       res.status(200).json({ message: "Admin updated successfully" });
 //     } else {
-//       res.status(404).json({ error: 'No admin found with the provided Id' });
+//       res.status(404).json({ error: "No admin found with the provided Id" });
 //     }
 //   } catch (error) {
-//     res.status(500).json({ error: 'Internal server error' });
+//     res.status(500).json({ error: "Internal server error" });
 //   }
 // }
 
@@ -130,40 +148,70 @@ async function updateAdmin(req, res) {
 
   const hashedPassword = password ? await bcrypt.hash(password, 10) : undefined;
 
-  let updateData = { name, email, phone};
+  let updateData = { name, email, phone };
   if (hashedPassword) {
     updateData.password = hashedPassword;
   }
 
   try {
-    const admin = await Admin.findByIdAndUpdate(adminId, updateData, { new: true });
+    const admin = await Admin.findByIdAndUpdate(adminId, updateData, {
+      new: true,
+    });
     if (admin) {
-      res.status(200).json({ message: 'Admin updated successfully', admin });
+      res.status(200).json({ message: "Admin updated successfully", admin });
     } else {
-      res.status(404).json({ error: 'No admin found with the provided Id' });
+      res.status(404).json({ error: "No admin found with the provided Id" });
     }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Internal server error' });
+    res.status(500).json({ error: "Internal server error" });
   }
 }
 
-async function deleteAdmin(req, res){
+async function deleteAdmin(req, res) {
   const adminId = req.params.id;
   try {
-      const admin = await Admin.findByIdAndDelete(adminId);
-      if (admin) {
-          res.status(200).json('admin deleted successfully');
-      }else{
-          res.status(404).json("no admin found with the provided Id")
-      };
+    const admin = await Admin.findByIdAndDelete(adminId);
+    if (admin) {
+      res.status(200).json("admin deleted successfully");
+    } else {
+      res.status(404).json("no admin found with the provided Id");
+    }
   } catch (error) {
-      res.json(error)
+    res.json(error);
   }
 }
+
+// async function setNewPass (req, res) {
+//   const { token } = req.params;
+//   const { newPassword } = req.body;
+
+//   try {
+//       const admin = await Admin.findOne({
+//       resetToken: token,
+//       resetTokenExpiration: { $gt: Date.now() },
+//       });
+//       if (!admin) {
+//           return res.status(400).json({ message: 'Invalid or expired token' });
+//       }
+//       const hashedPass = await bcrypt.hash(newPassword, 10);
+//       admin.password = hashedPass;
+//       admin.resetToken = null;
+//       admin.resetTokenExpiration = null;
+//       await admin.save();
+
+//       return res.status(200).json({ message: 'Password updated successfully' });
+//   } catch (error) {
+//       console.error(error);
+//       return res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+
 module.exports = {
   createAdmin: createAdmin,
   loginAdmin: loginAdmin,
+  getAdminId: getAdminId,
   updateAdmin: updateAdmin,
-  deleteAdmin: deleteAdmin
+  deleteAdmin: deleteAdmin,
+  // setNewPass: setNewPass,
 };
