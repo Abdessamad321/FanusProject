@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 // Reservation schema ======================================================
 
 const reservationSchema = new mongoose.Schema(
- 
+
   {
     transaction_time: {
       type: Date,

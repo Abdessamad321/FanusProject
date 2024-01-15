@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+
 const bodyParser = require("body-parser");
 
 const app = express();
@@ -33,7 +34,6 @@ app.use("/fanus", admin);
 //Reservation  Routes 
 const reservation = require("./routes/reservationRoutes");
 app.use('/reservation', reservation);
-
 
 mongoose.connection.on("connected", () => {
   console.log(`Connected`);
