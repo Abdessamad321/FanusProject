@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const Reservation = require('../models/reservation');
-const event = require('../Models/event'); 
+// const event = require('../Models/event'); 
 
-
-const ObjectId = mongoose.Types.ObjectId;
-
+const ObjectId = mongoose.Types.ObjectId; 
 
 // Create a new Reservation
 const createReservation = async (req, res) => {
@@ -138,7 +136,6 @@ const deleteReservation = async (req, res) => {
 module.exports = {
   ListReservation,
   createReservation,
-  
   getReservationById,
   updateReservation,
   deleteReservation,

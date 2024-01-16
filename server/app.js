@@ -1,18 +1,14 @@
 const express = require("express");
 const mongoose = require("mongoose");
-
 const bodyParser = require("body-parser");
 
 const app = express();
 
-
 const PORT = 7000;
-
 require("dotenv").config();
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 
 async function connected() {
   try {
@@ -22,23 +18,22 @@ async function connected() {
   }
 }
 connected();
-  
 
-const event = require ('./routes/eventRoutes')
-app.use("/fanus", event)
+const event = require("./routes/eventRoutes");
+app.use("/fanus", event);
 
 const user = require("./routes/userRoutes");
 app.use("/fanus", user);
+
 const admin = require("./routes/adminRoutes");
 app.use("/fanus", admin);
-//Reservation  Routes 
+
 const reservation = require("./routes/reservationRoutes");
-app.use('/reservation', reservation);
+app.use("/fanus", reservation);
 
 mongoose.connection.on("connected", () => {
   console.log(`Connected`);
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-    });
   });
-
+});
