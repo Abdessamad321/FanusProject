@@ -1,6 +1,11 @@
-const { Event } = require("../models/event");
+const express = require("express")
+const Event = require("../models/event");
 const mongoose = require("mongoose");
+const xss = require("xss");
 
+// const exports = {};
+
+const moment = require('moment');
 
 exports.createEvent = async function (req, res) {
   try {
@@ -15,17 +20,25 @@ exports.createEvent = async function (req, res) {
       remaining_places,
     } = req.body;
 
-    const existingEvent = await Event.findOne({ date, time, location });
+    // Validate and parse the date and time
+    const parsedDate = moment(date, 'DD/MM/YYYY', true);
+    const parsedTime = moment(time, 'HH:mm', true);
+
+    if (!parsedDate.isValid() || !parsedTime.isValid()) {
+      return res.status(400).json({ status: 'error', message: 'Invalid date or time format.' });
+    }
+
+    const existingEvent = await Event.findOne({ date: parsedDate.toDate(), time: parsedTime.format('HH:mm'), location });
 
     if (existingEvent) {
-   return res.status(200).json("Location already reserved for the same date and time!");
+      return res.status(422).json({ status: 'error', message: 'Location already reserved for the same date and time!' });
     }
 
     const event = new Event({
       name,
       description,
-      date,
-      time,
+      date: parsedDate.toDate(),
+      time: parsedTime.format('HH:mm'),
       price,
       location,
       capacity,
@@ -35,15 +48,17 @@ exports.createEvent = async function (req, res) {
     const result = await event.save();
 
     if (result) {
-    res.status(200).json("Event created successfully");
+      res.status(201).json({ status: 'success', message: 'Event created successfully' });
     } else {
-    res.status(400).json("Failed to create event! Please check your input data");
+      res.status(400).json({ status: 'error', message: 'Failed to create event! Please check your input data' });
     }
 
   } catch (error) {
-    res.status(500).json({error:error});
+    console.error(error);
+    res.status(500).json({ status: 'error', message: 'Internal Server Error' });
   }
 };
+
 
 exports.eventById= async function (req, res){
   const eventId = req.params.id;
@@ -57,7 +72,8 @@ if(event){
   }
   
 } catch (error) {
-  res.status(500).json({error:error});
+  res.status(500).json({error:error.messsage});
+  console.log(error)
 }
 };
 
