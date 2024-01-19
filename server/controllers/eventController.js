@@ -3,10 +3,6 @@ const Event = require("../models/event");
 const mongoose = require("mongoose");
 const xss = require("xss");
 
-// const exports = {};
-
-const moment = require('moment');
-
 exports.createEvent = async function (req, res) {
   try {
     const {
@@ -20,25 +16,17 @@ exports.createEvent = async function (req, res) {
       remaining_places,
     } = req.body;
 
-    // Validate and parse the date and time
-    const parsedDate = moment(date, 'DD/MM/YYYY', true);
-    const parsedTime = moment(time, 'HH:mm', true);
-
-    if (!parsedDate.isValid() || !parsedTime.isValid()) {
-      return res.status(400).json({ status: 'error', message: 'Invalid date or time format.' });
-    }
-
-    const existingEvent = await Event.findOne({ date: parsedDate.toDate(), time: parsedTime.format('HH:mm'), location });
+    const existingEvent = await Event.findOne({ date, time, location });
 
     if (existingEvent) {
-      return res.status(422).json({ status: 'error', message: 'Location already reserved for the same date and time!' });
+   return res.status(200).json("Location already reserved for the same date and time!");
     }
-
+ 
     const event = new Event({
       name,
       description,
-      date: parsedDate.toDate(),
-      time: parsedTime.format('HH:mm'),
+      date,
+      time,
       price,
       location,
       capacity,
@@ -48,14 +36,13 @@ exports.createEvent = async function (req, res) {
     const result = await event.save();
 
     if (result) {
-      res.status(201).json({ status: 'success', message: 'Event created successfully' });
+    res.status(200).json("Event created successfully");
     } else {
-      res.status(400).json({ status: 'error', message: 'Failed to create event! Please check your input data' });
+    res.status(400).json("Failed to create event! Please check your input data");
     }
 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ status: 'error', message: 'Internal Server Error' });
+    res.status(500).json({error:error});
   }
 };
 
@@ -68,7 +55,6 @@ if(event){
   res.status(200).json(event);
 }else{
     res.status(404).json(`Event with this ID ${eventId} not found`)
-    throw error
   }
   
 } catch (error) {
