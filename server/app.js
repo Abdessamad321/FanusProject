@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 const PORT = 7000;
+
 require("dotenv").config();
 
 app.use(express.json());
@@ -12,7 +13,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 async function connected() {
   try {
-    mongoose.connect(process.env.MONGO_CON);
+    mongoose.connect(process.env.MONGO_CON, {});
   } catch (error) {
     console.log(error);
   }

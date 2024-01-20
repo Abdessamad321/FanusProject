@@ -1,6 +1,5 @@
-const { Event } = require("../models/event");
-const mongoose = require("mongoose");
-
+const express = require("express")
+const Event = require("../models/event");
 
 exports.createEvent = async function (req, res) {
   try {
@@ -20,7 +19,7 @@ exports.createEvent = async function (req, res) {
     if (existingEvent) {
    return res.status(200).json("Location already reserved for the same date and time!");
     }
-
+ 
     const event = new Event({
       name,
       description,
@@ -45,6 +44,7 @@ exports.createEvent = async function (req, res) {
   }
 };
 
+
 exports.eventById= async function (req, res){
   const eventId = req.params.id;
   try {
@@ -53,11 +53,11 @@ if(event){
   res.status(200).json(event);
 }else{
     res.status(404).json(`Event with this ID ${eventId} not found`)
-    throw error
   }
   
 } catch (error) {
-  res.status(500).json({error:error});
+  res.status(500).json({error:error.messsage});
+  console.log(error)
 }
 };
 

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const moment = require('moment');
 
 // Event schema ======================================================
 
@@ -12,16 +13,24 @@ const eventSchema = new mongoose.Schema(
       type: String,
     },
     date: {
-      type: String,
+      type: Date,
       required: true,
     },
     time: {
       type: String,
       required: true,
+      validate: {
+        validator: function (value) {
+          const parsedTime = moment(value, ['h:mm A', 'HH:mm', 'H A', 'HH'], true);
+          return parsedTime.isValid();
+        },
+        message: 'Invalid time format.',
+      },
     },
     price: {
       type: Number,
       required: true,
+      min: 0,
     },
     location: {
       type: String,
