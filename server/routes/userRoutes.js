@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userControllers = require('../controllers/userControllers')
-const redirectToRole = require('../../middlewares/auth');
+const{ redirectToRole }= require('../middlewares/auth');
 // const upload = require('../../middlewares/Cloudinary')
-
-
 router.post('/user', userControllers.createUser);
 
 router.post("/user/login", redirectToRole, userControllers.loginUser);

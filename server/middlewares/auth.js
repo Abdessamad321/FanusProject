@@ -16,5 +16,5 @@ function redirectToRole(req, res, next) {
     next();
   }
   
-  module.exports = redirectToRole;
+  module.exports = {redirectToRole};
   
