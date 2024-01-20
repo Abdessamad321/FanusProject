@@ -19,7 +19,8 @@ router.put("/user/:id", userControllers.updateUser);
 
 router.patch("/user/update/:id", userControllers.updateIdUser);//upload.single('photo')
 
-router.delete("/user/delete", userControllers.deleteUser);
+// router.delete("/user/delete", userControllers.deleteUser);
 
+router.patch("/user/delete", userControllers.deleteUser);
 
 module.exports = router

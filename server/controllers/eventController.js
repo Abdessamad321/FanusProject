@@ -1,7 +1,5 @@
 const express = require("express")
 const Event = require("../models/event");
-const mongoose = require("mongoose");
-const xss = require("xss");
 
 exports.createEvent = async function (req, res) {
   try {
