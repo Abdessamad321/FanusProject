@@ -17,7 +17,7 @@ async function createUser(req, res) {
   const realEmail = xss(email);
   const realNationality = xss(nationality);
   const realPass = xss(password);
-  const photo = req.file ? req.file.path : null;
+  const user_photo = req.file ? req.file.path : null;
 
   const validationErrors = userValidation.validateUser(
     realName,
@@ -56,7 +56,7 @@ async function createUser(req, res) {
                 email: realEmail,
                 nationality: realNationality,
                 password: hash,
-                photo: photo,
+                user_photo: user_photo,
               });
               await newUser.save();
               res.status(200).json("User created successfully");
@@ -81,18 +81,24 @@ async function loginUser(req, res) {
     // SEARCHING THE User AND COMPARE
 
     const checkUser = await User.findOne({
-      email: realEmail
+      email: realEmail,
     });
-    
+
     if (!checkUser || !(await bcrypt.compare(realPass, checkUser.password))) {
       return res.status(401).json({ error: "Invalid credentials" });
     }
 
     if (!checkUser.valid_account || checkUser.isDeleted) {
       if (!checkUser.valid_account) {
-        return res.status(401).json({ error: "Your account is not valid. Please check your email." });
+        return res
+          .status(401)
+          .json({
+            error: "Your account is not valid. Please check your email.",
+          });
       } else {
-        return res.status(401).json({ error: "No User Found. Please Register" });
+        return res
+          .status(401)
+          .json({ error: "No User Found. Please Register" });
       }
     }
 
@@ -167,12 +173,38 @@ async function profileUser(req, res) {
   }
 }
 
+async function searchUser(req, res) {
+  const sort = req.query.sort === "DESC" ? -1 : 1;
+  const query = req.query.query || "";
+  try {
+    const user = await User.find({
+      name: new RegExp(query, "i"),
+    }).sort({ createdAt: sort });
+    res.json(user);
+  } catch (error) {
+    res.status(500).json({ error: error });
+  }
+}
+
 async function getUserId(req, res) {
   try {
     const user = await User.findById(req.params.id);
     res.json(user);
   } catch (error) {
     res.status(500).json({ error: error });
+  }
+}
+
+async function allUsers(req, res) {
+  try {
+    const user = await User.find({});
+    if (!user) {
+      throw new Error("No Users Found");
+    } else {
+      res.status(200).json(user);
+    }
+  } catch {
+    res.status(500).json({ error: "Error in fetching users." });
   }
 }
 
@@ -203,7 +235,7 @@ async function updateIdUser(req, res) {
   const { old_password, new_password, name, phone, email, nationality } =
     req.body;
 
-  const photo = req.file ? req.file.path : null;
+  const user_photo = req.file ? req.file.path : null;
 
   try {
     const user = await User.findById(userId);
@@ -215,7 +247,7 @@ async function updateIdUser(req, res) {
     }
 
     const hashedNewPassword = await bcrypt.hash(new_password, 10);
-    user.photo = photo;
+    user.user_photo = user_photo;
     user.name = name;
     user.phone = phone;
     user.email = email;
@@ -251,10 +283,10 @@ async function deleteUser(req, res) {
 
     if (updatedUser) {
       res.json(`User with ID ${userId} marked as deleted`);
+      // res.redirect()
     } else {
       res.status(404).json(`User with ID ${userId} not found`);
     }
-
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error });
@@ -265,7 +297,9 @@ module.exports = {
   createUser: createUser,
   loginUser: loginUser,
   validationUser: validationUser,
+  searchUser: searchUser,
   getUserId: getUserId,
+  allUsers: allUsers,
   updateUser: updateUser,
   updateIdUser: updateIdUser,
   deleteUser: deleteUser,
