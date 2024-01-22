@@ -15,17 +15,49 @@ const eventSchema = new mongoose.Schema(
     date: {
       type: Date,
       required: true,
+      min: new Date().toISOString().split('T')[0],
+      max: () => {
+        const maxDate = new Date();
+        maxDate.setFullYear(maxDate.getFullYear() + 5);
+        return maxDate;
+      },
+      set: function (value) {
+        const validFormats = ['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD', 'YYYY/MM/DD'];
+        let formattedDate = null;
+
+        for (const format of validFormats) {
+          const parsedDate = moment(value, format, true);
+          if (parsedDate.isValid()) {
+            formattedDate = parsedDate.format('YYYY-MM-DD');
+            break;
+          }
+        }
+        return formattedDate;
+      },
     },
     time: {
       type: String,
-      required: true,
-      validate: {
-        validator: function (value) {
-          const parsedTime = moment(value, ['h:mm A', 'HH:mm', 'H A', 'HH'], true);
-          return parsedTime.isValid();
-        },
-        message: 'Invalid time format.',
+      set: function (value) {
+        const validFormats = ['HH:mm:ss', 'HH:mm', 'H:mm:ss', 'H:mm'];
+        let formattedTime = null;
+    
+        for (const format of validFormats) {
+          const parsedTime = moment.utc(value, format, true);
+          if (parsedTime.isValid()) {
+            formattedTime = parsedTime.format('HH:mm:ss');
+            break;
+          }
+        }
+        return formattedTime;
       },
+      validate: {
+        validator: function (v) {
+          const timeRegex = /^(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/;
+          return timeRegex.test(v);
+        },
+        message: 'Invalid time format!',
+      },
+      required: [true, 'Time is required'],
     },
     price: {
       type: Number,

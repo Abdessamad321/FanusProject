@@ -96,7 +96,7 @@ async function loginAdmin(req, res) {
   }
 }
 
-async function getAdminId(req, res) {
+async function getAdminById(req, res) {
   const adminid = req.params.id;
   try {
     const getamdin = await Admin.findById(adminid);
@@ -109,6 +109,52 @@ async function getAdminId(req, res) {
     res.status(500).json({ error: error.message });
   }
 }
+
+async function getAllAdmins(req, res) {
+  try {
+    const admin = await Admin.find({});
+    if (!admin) {
+      throw new Error("No admins Found");
+    } else {
+      res.status(200).json(admin);
+    }
+  } catch {
+    res.status(500).json({ error: "Error in fetching admins." });
+  }
+}
+
+async function getAdminByMail(req, res) {
+  const email = req.params.email;
+
+  try {
+    const admin = await Admin.findOne({ email: email });
+
+    if (admin) {
+      res.status(200).json(admin);
+    } else {
+      res.status(404).json({ message: 'Admin not found by mail.' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+async function getAdminByName(req, res) {
+  const { name } = req.params;
+
+  try {
+    const admin = await Admin.findOne({ name });
+    
+    if (admin) {
+      res.status(200).json(admin);
+    } else {
+      res.status(404).json({ message: 'Admin not found by name.' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 
 // async function updateAdmin(req, res) {
 //   const adminId = req.params.id;
@@ -207,10 +253,15 @@ async function deleteAdmin(req, res) {
 //   }
 // };
 
+
+
 module.exports = {
   createAdmin: createAdmin,
   loginAdmin: loginAdmin,
-  getAdminId: getAdminId,
+  getAdminById: getAdminById,
+  getAllAdmins: getAllAdmins,
+  getAdminByMail: getAdminByMail,
+  getAdminByName: getAdminByName,
   updateAdmin: updateAdmin,
   deleteAdmin: deleteAdmin,
   // setNewPass: setNewPass,

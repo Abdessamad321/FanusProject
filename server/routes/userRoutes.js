@@ -11,11 +11,11 @@ router.post("/user/login", userControllers.loginUser);// redirectToRole,
 
 router.get("/user/profile", userControllers.profileUser);
 
-router.get("/users", userControllers.searchUser);
+router.get("/users", userControllers.searchUser);// a revoir
 
 router.get("/user/:id", userControllers.getUserId);
 
-router.get("/users/all", userControllers.allUsers);
+router.get("/users", userControllers.allUsers);
 
 router.get("/user/validate/:id", userControllers.validationUser);
 

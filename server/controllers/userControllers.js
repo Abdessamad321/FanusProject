@@ -297,7 +297,7 @@ module.exports = {
   createUser: createUser,
   loginUser: loginUser,
   validationUser: validationUser,
-  searchUser: searchUser,
+  searchUser: searchUser,//a revoir
   getUserId: getUserId,
   allUsers: allUsers,
   updateUser: updateUser,
