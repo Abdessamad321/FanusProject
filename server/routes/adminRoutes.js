@@ -4,7 +4,7 @@ const adminControllers = require("../controllers/adminControllers");
 
 router.post("/admin", adminControllers.createAdmin);
 
-router.post("/admin/login", redirectToRole, adminControllers.loginAdmin);
+router.post("/admin/login", adminControllers.loginAdmin);//redirectToRole
 
 router.get('/admin/:id', adminControllers.getAdminId);
 
