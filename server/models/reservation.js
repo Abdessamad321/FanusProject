@@ -1,14 +1,20 @@
 const mongoose = require("mongoose");
-// const { v4: uuidv4 } = require('uuid');
-
-// Reservation schema ======================================================
 
 const reservationSchema = new mongoose.Schema(
-
   {
     transaction_time: {
       type: Date,
       default: Date.now,
+    },
+    userLink: {
+      type: mongoose.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    eventLink: {
+      type: mongoose.Types.ObjectId,
+      ref: 'Event', 
+      required: true,
     },
     payment_method: {
       type: String,
