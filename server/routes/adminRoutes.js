@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const adminControllers = require("../controllers/adminControllers");
+const redirectToRole = require('../middlewares/auth');
 
 router.post("/admin", adminControllers.createAdmin);
 

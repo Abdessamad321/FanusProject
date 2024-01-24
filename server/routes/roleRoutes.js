@@ -20,4 +20,4 @@ router.delete('/role/:id', roleController.deleteRole);
 // Get roles sorted by name
 router.get('/roles/sortByName', roleController.getRolesSortedByName);
 
-module.exports = router
+module.exports = router;

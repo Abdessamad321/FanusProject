@@ -5,7 +5,7 @@ const bodyParser = require("body-parser");
 const app = express();
 
 
-const PORT = 7000;
+const PORT = 3000;
 
 require("dotenv").config();
 
@@ -23,8 +23,8 @@ async function connected() {
 connected();
   
 
-const event = require ('./routes/eventRoutes')
-app.use("/fanus", event)
+const event = require ('./routes/eventRoutes');
+app.use("/fanus", event);
 
 const user = require("./routes/userRoutes");
 app.use("/fanus", user);
@@ -33,6 +33,9 @@ app.use("/fanus", admin);
 //Reservation  Routes 
 const reservation = require("./routes/reservationRoutes");
 app.use('/reservation', reservation);
+//Role Routes
+const role = require('../server/routes/roleRoutes');
+app.use("/roles", role);
 
 
 mongoose.connection.on("connected", () => {

@@ -1,3 +1,5 @@
+const express = require('express');
+
 const checkRole = (allowedRoles) => {
     return (req, res, next) => {
         const userRole = req.user ? req.user.role : null;

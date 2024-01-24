@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const Reservation = require('../models/reservation');
-const event = require('../Models/event'); 
+const event = require('../models/event'); 
 
 
 const ObjectId = mongoose.Types.ObjectId;
