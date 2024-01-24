@@ -4,14 +4,12 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-
-const PORT = 3000;
+const PORT = 7000;
 
 require("dotenv").config();
 
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
 
 async function connected() {
   try {
@@ -36,7 +34,6 @@ app.use('/reservation', reservation);
 //Role Routes
 const role = require('../server/routes/roleRoutes');
 app.use("/roles", role);
-
 
 mongoose.connection.on("connected", () => {
   console.log(`Connected`);
