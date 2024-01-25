@@ -1,7 +1,4 @@
 const mongoose = require("mongoose");
-// const { v4: uuidv4 } = require('uuid');
-
-// User schema ======================================================
 
 const userSchema = new mongoose.Schema(
   {
@@ -9,37 +6,24 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    phone: {
+    password: {
       type: String,
-      unique: true,
+      required: true,
     },
     email: {
       type: String,
       required: true,
       unique: true,
     },
-    password: {
+    phone: {
       type: String,
       required: true,
+      unique: true,
     },
-    nationality: {
-      type: String,
-    },
-    photo: {
-      type: String,
-    },
-    isDeleted:{
-      type: Boolean,
-      default: false
-    },
-    valid_account: {
-      type: Boolean,
-      default: false,
-    }
   },
   { timestamps: true }
 );
 
-const user = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
-module.exports = user;
+module.exports = User;
