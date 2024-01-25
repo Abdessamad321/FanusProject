@@ -16,7 +16,7 @@ router.get("/users", userControllers.searchUser);// a revoir
 router.get("/user/:id", userControllers.getUserId);
 
 router.get("/users", userControllers.allUsers);
-
+ 
 router.get("/user/validate/:id", userControllers.validationUser);
 
 router.put("/user/:id", userControllers.updateUser);
