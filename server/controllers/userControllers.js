@@ -123,6 +123,27 @@ async function getAllUsers(req, res) {
   }
 }
 
+const getUser = async (req, res) => {
+  const { email, name } = req.query;
+
+  try {
+    const user = await User.findOne({
+      $or: [
+        { email: email },
+        { name: name },
+      ],
+    });
+
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({ message: 'User not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 async function getUserByMail(req, res) {
   const email = req.params.email;
 
@@ -138,7 +159,6 @@ async function getUserByMail(req, res) {
     res.status(500).json({ error: error.message });
   }
 };
-
 async function getUserByName(req, res) {
   const { name } = req.params;
 
@@ -154,7 +174,6 @@ async function getUserByName(req, res) {
     res.status(500).json({ error: error.message });
   }
 };
-
 
 // async function updateUser(req, res) {
 //   const userId = req.params.id;
@@ -258,6 +277,7 @@ async function deleteUser(req, res) {
 module.exports = {
   createUser: createUser,
   loginUser: loginUser,
+  getUser : getUser,
   getUserById: getUserById,
   getAllUsers: getAllUsers,
   getUserByMail: getUserByMail,
