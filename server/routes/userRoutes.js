@@ -12,7 +12,7 @@ router.route("/list").get(userControllers.getAllUsers);
 
 
 // A VOIR
-// router.route("/search").get(userControllers.getUser);
+router.route("/search").get(userControllers.getUser);
 
 
 

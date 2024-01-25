@@ -1,6 +1,6 @@
 const express = require("express");
 
-function validateAdmin(name, email, phone, password) {
+function validateUser(name, email, phone, password) {
   const errors = [];
   if (!name || !name.match(/^[A-Za-z ]+$/)) {
     errors.push("Enter your name; only letters allowed.");
@@ -22,7 +22,7 @@ function validateAdmin(name, email, phone, password) {
   return errors;
 }
 
-function validateUser(name, phone, email, nationality, password) {
+function validateCustomer(name, phone, email, nationality, password) {
   const errors = [];
 
   if (!name || !name.match(/^[A-Za-z ]+$/)) {
@@ -54,6 +54,6 @@ function validateUser(name, phone, email, nationality, password) {
 }
 
 module.exports = {
+  validateCustomer: validateCustomer,
   validateUser: validateUser,
-  validateAdmin: validateAdmin,
 };
