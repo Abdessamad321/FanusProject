@@ -1,30 +1,32 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userControllers = require('../controllers/userControllers')
 
-// const redirectToRole = require('../../middlewares/auth');
-const upload = require('../middlewares/Cloudinary')
+const { redirectToRole } = require("../middlewares/auth");
+const userControllers = require("../controllers/userControllers");
 
-router.post('/user', upload.single('user_photo'), userControllers.createUser);
+router.route("/create").post(userControllers.createUser);
 
-router.post("/user/login", userControllers.loginUser);// redirectToRole,
+router.route("/login").post(userControllers.loginUser);
 
-router.get("/user/profile", userControllers.profileUser);
+router.route("/list").get(userControllers.getAllUsers);
 
-router.get("/users", userControllers.searchUser);// a revoir
+//Merge into one route /search?keyword=value
+// const user = await User.findOne({
+//   $or: [
+//     { email: keyword },
+//     { name: keyword },
+//   ],
+// });
+//Else 404 not found
+// ==>
+router.route("/search/mail/:email").get(userControllers.getUserByMail);
+router.route("/search/name/:name").get(userControllers.getUserByName);
+// <==
 
-router.get("/user/:id", userControllers.getUserId);
+router
+  .route("/:id")
+  .get(userControllers.getUserById)
+  .put(userControllers.updateUser)
+  .delete(userControllers.deleteUser);
 
-router.get("/users", userControllers.allUsers);
-
-router.get("/user/validate/:id", userControllers.validationUser);
-
-router.put("/user/:id", userControllers.updateUser);
-
-router.patch("/user/update/:id", upload.single('user_photo'), userControllers.updateIdUser);//upload.single('photo')
-
-// router.delete("/user/delete", userControllers.deleteUser);
-
-router.patch("/user/delete", userControllers.deleteUser);
-
-module.exports = router
+module.exports = router;
