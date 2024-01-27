@@ -9,14 +9,14 @@ router.post("/create", customerControllers.createCustomer);//upload.single("cust
 
 router.post("/login", customerControllers.loginCustomer); // redirectToRole,
 
+router.get("/list", customerControllers.allCustomers);
+
 router.get("/profile", customerControllers.profileCustomer);
 
 // a revoir
 // router.get("/customers", customerControllers.searchCustomer); 
 
 router.get("/:id", customerControllers.getCustomerId);
-
-router.get("/customers", customerControllers.allCustomers);
 
 router.get("/validate/:id", customerControllers.validationCustomer);
 
