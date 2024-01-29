@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const moment = require('moment');
 
-// Event schema ======================================================
+
 
 const eventSchema = new mongoose.Schema(
   {

@@ -1,13 +1,7 @@
-<<<<<<< HEAD
-const { Event } = require("../models/event");
-const mongoose = require("mongoose");
-
-// Xss+regular validations expressions
-=======
-const express = require("express")
+const express = require("express");
 const Event = require("../models/event");
 
->>>>>>> bd69d5aa153c0d3db1a7f3ae79593eeb52fd8cba
+
 exports.createEvent = async function (req, res) {
   try {
     const {
@@ -80,8 +74,7 @@ try {
 }
 };
 
-//Sort req.query
-// limit
+
 exports.searchEvent = async function (req, res) {
   try {
     const eventName = req.query.name;
@@ -97,6 +90,7 @@ exports.searchEvent = async function (req, res) {
     res.status(500).json({ error: error.message });
   }
 };
+
 
 
 exports.updateEvent= async function (req, res){
@@ -127,3 +121,19 @@ try {
   res.status(500).json({error:error});
 }
 }
+
+exports.eventByName = async function (req,res) {
+  const eventName = req.params.name;
+  try {
+  const event = await Event.findOne({name:eventName});
+if(event){
+  res.status(200).json(event);
+}else{
+    res.status(404).json(`Event with this name not found`)
+  }
+  
+} catch (error) {
+  res.status(500).json({error:error.messsage});
+  console.log(error)
+}
+};
