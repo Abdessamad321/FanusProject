@@ -1,14 +1,48 @@
-// const checkRole = (allowedRoles) => {
-//     return (req, res, next) => {
-//         const userRole = req.user ? req.user.role : null;
-//     const adminRole = req.admin ? req.admin.role : null;
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const secretKey = process.env.TOKEN_KEY;
 
-//     if (allowedRoles.includes(userRole) || allowedRoles.includes(adminRole)) {
-//       next();
-//     } else {
-//         res.status(403).json({ error: 'Forbidden: Insufficient permissions' });
-//       }
-//     };
-// };
-  
-// module.exports = checkRole;
+const checkAdminRole = (req, res, next) => {
+  if (!req.headers.authorization) {
+    return res.status(401).json({ err: "Unauthorized" });
+  }
+
+  const token = req.headers.authorization.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ err: "Unauthorized" });
+  }
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ err: "Unauthorized" });
+    }
+    if (decoded.role !== "admin" && decoded.role !== "superAdmin") {
+      return res
+        .status(403)
+        .json({ err: "Forbidden - Admin or Super Admin role required" });
+    }
+    next();
+  });
+};
+
+const checkSuperAdminRole = (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+  if (!token) {
+    return res.status(401).json({ err: "Unauthorized" });
+  }
+  jwt.verify(token, secretKey, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ err: "Unauthorized" });
+    }
+    if (decoded.role !== "superAdmin") {
+      return res.status(403).json({ err: "Forbidden - Super Admin role required" });
+    }
+    next();
+  });
+};
+
+module.exports = {
+  checkAdminRole: checkAdminRole,
+  checkSuperAdminRole: checkSuperAdminRole,
+};
+

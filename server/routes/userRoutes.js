@@ -1,30 +1,36 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const userControllers = require('../controllers/userControllers')
+const { checkAdminRole, checkSuperAdminRole } = require('../middlewares/checkRole');
+const { redirectToRole } = require("../middlewares/auth");
+const userControllers = require("../controllers/userControllers");
 
-// const redirectToRole = require('../../middlewares/auth');
-const upload = require('../middlewares/Cloudinary')
+router.route("/create").post(checkAdminRole, userControllers.createUser);
 
-router.post('/user', upload.single('user_photo'), userControllers.createUser);
+router.route("/login").post(userControllers.loginUser);
 
-router.post("/user/login", userControllers.loginUser);// redirectToRole,
+router.route("/list").get(checkAdminRole, userControllers.getAllUsers);
 
-router.get("/user/profile", userControllers.profileUser);
+// A VOIR
+router.route("/search").get(checkAdminRole, userControllers.getUser);
 
-router.get("/users", userControllers.searchUser);// a revoir
+//Merge into one route /search?keyword=value
+// const user = await User.findOne({
+//   $or: [
+//     { email: keyword },
+//     { name: keyword },
+//   ],
+// });
+//Else 404 not found
+// ==>
+// router.route("/search/mail/:email").get(userControllers.getUserByMail);
 
-router.get("/user/:id", userControllers.getUserId);
+// router.route("/search/name/:name").get(userControllers.getUserByName);
+// <==
 
-router.get("/users", userControllers.allUsers);
+router
+  .route("/:id")
+  .get(checkAdminRole, userControllers.getUserById)
+  .put(checkSuperAdminRole, userControllers.updateUser)
+  .delete(checkSuperAdminRole, userControllers.deleteUser);
 
-router.get("/user/validate/:id", userControllers.validationUser);
-
-router.put("/user/:id", userControllers.updateUser);
-
-router.patch("/user/update/:id", upload.single('user_photo'), userControllers.updateIdUser);//upload.single('photo')
-
-// router.delete("/user/delete", userControllers.deleteUser);
-
-router.patch("/user/delete", userControllers.deleteUser);
-
-module.exports = router
+module.exports = router;
