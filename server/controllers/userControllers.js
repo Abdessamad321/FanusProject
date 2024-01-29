@@ -74,7 +74,7 @@ async function loginUser(req, res) {
         return res.status(401).json("invalid credentials");
       } else {
         const token = jwt.sign(
-          { userId: checkUser.id, email: checkUser.email },
+          { userId: checkUser.id, email: checkUser.email, role: checkUser.role},
           secretKey,
           { expiresIn: "24h" }
         );
@@ -144,36 +144,41 @@ const getUser = async (req, res) => {
   }
 };
 
-async function getUserByMail(req, res) {
-  const email = req.params.email;
 
-  try {
-    const user = await User.findOne({ email: email });
+// get by name & email separated
 
-    if (user) {
-      res.status(200).json(user);
-    } else {
-      res.status(404).json({ message: 'User not found by mail.' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-async function getUserByName(req, res) {
-  const { name } = req.params;
+// async function getUserByMail(req, res) {
+//   const email = req.params.email;
 
-  try {
-    const user = await User.findOne({ name });
+//   try {
+//     const user = await User.findOne({ email: email });
+
+//     if (user) {
+//       res.status(200).json(user);
+//     } else {
+//       res.status(404).json({ message: 'User not found by mail.' });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+// async function getUserByName(req, res) {
+//   const { name } = req.params;
+
+//   try {
+//     const user = await User.findOne({ name });
     
-    if (user) {
-      res.status(200).json(user);
-    } else {
-      res.status(404).json({ message: 'User not found by name.' });
-    }
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
+//     if (user) {
+//       res.status(200).json(user);
+//     } else {
+//       res.status(404).json({ message: 'User not found by name.' });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ error: error.message });
+//   }
+// };
+
+
 
 // async function updateUser(req, res) {
 //   const userId = req.params.id;
@@ -280,8 +285,8 @@ module.exports = {
   getUser : getUser,
   getUserById: getUserById,
   getAllUsers: getAllUsers,
-  getUserByMail: getUserByMail,
-  getUserByName: getUserByName,
+  // getUserByMail: getUserByMail,
+  // getUserByName: getUserByName,
   updateUser: updateUser,
   deleteUser: deleteUser,
   // setNewPass: setNewPass,
