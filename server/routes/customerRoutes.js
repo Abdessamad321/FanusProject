@@ -14,7 +14,7 @@ router.get("/list", customerControllers.allCustomers);
 router.get("/profile", customerControllers.profileCustomer);
 
 // a revoir
-// router.get("/customers", customerControllers.searchCustomer); 
+// router.get("/customers", customerControllers.searchCustomer);
 
 router.get("/:id", customerControllers.getCustomerId);
 
