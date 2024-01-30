@@ -293,6 +293,32 @@ async function deleteCustomer(req, res) {
   }
 }
 
+
+// async function setNewPass (req, res) {
+//   const { token } = req.params;
+//   const { newPassword } = req.body;
+
+//   try {
+//       const customer = await Customer.findOne({
+//       resetToken: token,
+//       resetTokenExpiration: { $gt: Date.now() },
+//       });
+//       if (!customer) {
+//           return res.status(400).json({ message: 'Invalid or expired token' });
+//       }
+//       const hashedPass = await bcrypt.hash(newPassword, 10);
+//       customer.password = hashedPass;
+//       customer.resetToken = null;
+//       customer.resetTokenExpiration = null;
+//       await customer.save();
+
+//       return res.status(200).json({ message: 'Password updated successfully' });
+//   } catch (error) {
+//       console.error(error);
+//       return res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+
 module.exports = {
   createCustomer: createCustomer,
   loginCustomer: loginCustomer,
