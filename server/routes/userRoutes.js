@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const { checkAdminRole, checkSuperAdminRole } = require('../middlewares/checkRole');
+const {
+  checkAdminRole,
+  checkSuperAdminRole,
+} = require("../middlewares/checkRole");
+
 const { redirectToRole } = require("../middlewares/auth");
 const userControllers = require("../controllers/userControllers");
 
