@@ -68,7 +68,7 @@ async function createCustomer(req, res) {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error });
+    res.status(500).json({ error: error.message });
   }
 }
 
@@ -173,18 +173,18 @@ async function profileCustomer(req, res) {
   }
 }
 
-async function searchCustomer(req, res) {
-  const sort = req.query.sort === "DESC" ? -1 : 1;
-  const query = req.query.query || "";
-  try {
-    const customer = await Customer.find({
-      name: new RegExp(query, "i"),
-    }).sort({ createdAt: sort });
-    res.json(customer);
-  } catch (error) {
-    res.status(500).json({ error: error });
-  }
-}
+// async function searchCustomer(req, res) {
+//   const sort = req.query.sort === "DESC" ? -1 : 1;
+//   const query = req.query.query || "";
+//   try {
+//     const customer = await Customer.find({
+//       name: new RegExp(query, "i"),
+//     }).sort({ createdAt: sort });
+//     res.json(customer);
+//   } catch (error) {
+//     res.status(500).json({ error: error });
+//   }
+// }
 
 async function getCustomerId(req, res) {
   try {
@@ -297,7 +297,8 @@ module.exports = {
   createCustomer: createCustomer,
   loginCustomer: loginCustomer,
   validationCustomer: validationCustomer,
-  searchCustomer: searchCustomer,//a revoir
+  //a revoir
+  // searchCustomer: searchCustomer,
   getCustomerId: getCustomerId,
   allCustomers: allCustomers,
   updateCustomer: updateCustomer,
