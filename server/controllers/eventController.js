@@ -91,8 +91,6 @@ exports.searchEvent = async function (req, res) {
   }
 };
 
-
-
 exports.updateEvent= async function (req, res){
   try {
     const { id } = req.params;
@@ -136,4 +134,69 @@ if(event){
   res.status(500).json({error:error.messsage});
   console.log(error)
 }
+};
+
+exports.filterAndSortEvent = async function (req, res) {
+  try {
+    const page = req.query.page || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const params = req.query || {};
+    const object = {};
+
+    if (params.price !== undefined) {
+      const price = parseFloat(params.price);
+      if (!isNaN(price)) {
+        object.price = price;
+      }
+    }
+
+    if (params.location !== null && params.location !== undefined) {
+      object.location = params.location;
+    }
+
+    if (params.date) {
+      object.date = new Date(params.date);
+    }
+
+    const sortDirection = params.sort === 'asc' ? 1 : -1;
+
+    const events = await Event.aggregate([
+      {
+        $match: object,
+      },
+      {
+        $sort:{ price: sortDirection },
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
+      },
+      {
+        $project: {
+          _id: 1,
+          name: 1,
+          description: 1,
+          date: 1,
+          time: 1,
+          price: 1,
+          location: 1,
+          capacity: 1,
+          remaining_places: 1,
+        },
+      },
+    ]);
+
+    if (!events || events.length === 0) {
+      return res.status(404).json({ message: 'No events found with the specified filter.' });
+    }
+
+    res.status(200).json(events);
+    
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal server error. Please try again later.' });
+  }
 };
