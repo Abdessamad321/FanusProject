@@ -151,6 +151,13 @@ exports.filterAndSortEvent = async function (req, res) {
       }
     }
 
+    if (params.remaining_places !== undefined) {
+      const remainingPlaces = parseInt(params.remaining_places);
+      if (!isNaN(remainingPlaces)) {
+        object.remaining_places = remainingPlaces;
+      }
+    }
+
     if (params.location !== null && params.location !== undefined) {
       object.location = params.location;
     }
@@ -190,7 +197,7 @@ exports.filterAndSortEvent = async function (req, res) {
     ]);
 
     if (!events || events.length === 0) {
-      return res.status(404).json({ message: 'No events found with the specified filter.' });
+      return res.status(404).json({ message: 'No events found with the specified filter.'});
     }
 
     res.status(200).json(events);
