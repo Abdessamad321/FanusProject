@@ -87,7 +87,7 @@ exports.searchEvent = async function (req, res) {
     } else if (eventOwner) {
       queryObj = { owner: { $regex: eventOwner, $options: "i" } };
     } else {
-      return res.status(400).json("Please provide either 'name' or 'owner' parameter.");
+      return res.status(400).json("Please provide either 'name' or 'owner'.");
     }
 
     const events = await Event.find(queryObj);
