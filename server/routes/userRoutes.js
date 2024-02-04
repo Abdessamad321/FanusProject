@@ -31,6 +31,8 @@ router.route("/search").get(checkAdminRole, userControllers.getUser);
 // router.route("/search/name/:name").get(userControllers.getUserByName);
 // <==
 
+router.route("/filter").get( userControllers.filterUser);
+
 router
   .route("/:id")
   .get(checkAdminRole, userControllers.getUserById)

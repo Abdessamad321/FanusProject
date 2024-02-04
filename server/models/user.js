@@ -17,13 +17,17 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "superAdmin", "" ],
+      enum: ["admin", "superAdmin", ""],
       default: "",
     },
     phone: {
       type: String,
       required: true,
       unique: true,
+    },
+    events_count: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

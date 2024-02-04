@@ -252,6 +252,31 @@ async function deleteUser(req, res) {
   }
 }
 
+async function filterUser(req, res){
+  try{
+     // Get query parameters from the request
+     const eventsCount = req.query.events_count ? parseInt(req.query.events_count) : null;
+     const creationDate = req.query.creation_date ? new Date(req.query.creation_date) : null;
+
+     let filter = {};
+
+     if (eventsCount !== null) {
+         filter.events_count = { $gte: eventsCount };
+     }
+
+     if (creationDate !== null) {
+         filter.creation_date = { $gte: creationDate };
+     }
+
+     // Use the filter in the query
+     const filteredUsers = await User.find(filter);
+
+     // Return the filtered users as JSON
+     res.json({ users: filteredUsers });
+  }catch(error){
+    res.status(500).json({ error: "Internal server error" });
+  }
+}
 // async function setNewPass (req, res) {
 //   const { token } = req.params;
 //   const { newPassword } = req.body;
@@ -289,5 +314,6 @@ module.exports = {
   // getUserByName: getUserByName,
   updateUser: updateUser,
   deleteUser: deleteUser,
+  filterUser: filterUser,
   // setNewPass: setNewPass,
 };

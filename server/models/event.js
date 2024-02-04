@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
-const moment = require('moment');
+const moment = require("moment");
 
 // Event schema ======================================================
 
 const eventSchema = new mongoose.Schema(
   {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
     name: {
       type: String,
       required: true,
@@ -15,20 +19,25 @@ const eventSchema = new mongoose.Schema(
     date: {
       type: Date,
       required: true,
-      min: new Date().toISOString().split('T')[0],
+      min: new Date().toISOString().split("T")[0],
       max: () => {
         const maxDate = new Date();
         maxDate.setFullYear(maxDate.getFullYear() + 5);
         return maxDate;
       },
       set: function (value) {
-        const validFormats = ['DD/MM/YYYY', 'MM/DD/YYYY', 'YYYY-MM-DD', 'YYYY/MM/DD'];
+        const validFormats = [
+          "DD/MM/YYYY",
+          "MM/DD/YYYY",
+          "YYYY-MM-DD",
+          "YYYY/MM/DD",
+        ];
         let formattedDate = null;
 
         for (const format of validFormats) {
           const parsedDate = moment(value, format, true);
           if (parsedDate.isValid()) {
-            formattedDate = parsedDate.format('YYYY-MM-DD');
+            formattedDate = parsedDate.format("YYYY-MM-DD");
             break;
           }
         }
@@ -38,13 +47,13 @@ const eventSchema = new mongoose.Schema(
     time: {
       type: String,
       set: function (value) {
-        const validFormats = ['HH:mm:ss', 'HH:mm', 'H:mm:ss', 'H:mm'];
+        const validFormats = ["HH:mm:ss", "HH:mm", "H:mm:ss", "H:mm"];
         let formattedTime = null;
-    
+
         for (const format of validFormats) {
           const parsedTime = moment.utc(value, format, true);
           if (parsedTime.isValid()) {
-            formattedTime = parsedTime.format('HH:mm:ss');
+            formattedTime = parsedTime.format("HH:mm:ss");
             break;
           }
         }
@@ -55,9 +64,9 @@ const eventSchema = new mongoose.Schema(
           const timeRegex = /^(?:2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]$/;
           return timeRegex.test(v);
         },
-        message: 'Invalid time format!',
+        message: "Invalid time format!",
       },
-      required: [true, 'Time is required'],
+      required: [true, "Time is required"],
     },
     price: {
       type: Number,
@@ -78,6 +87,6 @@ const eventSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
- const Event = mongoose.model("Event", eventSchema);
+const Event = mongoose.model("Event", eventSchema);
 
- module.exports = Event;
+module.exports = Event;
