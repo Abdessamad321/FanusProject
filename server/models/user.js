@@ -25,10 +25,10 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    events_count: {
-      type: Number,
-      default: 0,
-    },
+    // events_count: {
+    //   type: Number,
+    //   default: 0,
+    // },
   },
   { timestamps: true }
 );

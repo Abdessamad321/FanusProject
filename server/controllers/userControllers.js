@@ -144,60 +144,6 @@ const getUser = async (req, res) => {
   }
 };
 
-
-// get by name & email separated
-
-// async function getUserByMail(req, res) {
-//   const email = req.params.email;
-
-//   try {
-//     const user = await User.findOne({ email: email });
-
-//     if (user) {
-//       res.status(200).json(user);
-//     } else {
-//       res.status(404).json({ message: 'User not found by mail.' });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-// async function getUserByName(req, res) {
-//   const { name } = req.params;
-
-//   try {
-//     const user = await User.findOne({ name });
-    
-//     if (user) {
-//       res.status(200).json(user);
-//     } else {
-//       res.status(404).json({ message: 'User not found by name.' });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
-
-
-
-// async function updateUser(req, res) {
-//   const userId = req.params.id;
-//   const { name, email, phone, password } = req.body;
-//   let updateData = { name, email, phone, password };
-
-//   try {
-//     const user = await User.findByIdAndUpdate(userId, updateData);
-
-//     if (user) {
-//       res.status(200).json({ message: "User updated successfully" });
-//     } else {
-//       res.status(404).json({ error: "No user found with the provided Id" });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// }
-
 async function updateUser(req, res) {
   const userId = req.params.id;
   const { name, email, phone, password } = req.body;
@@ -252,31 +198,7 @@ async function deleteUser(req, res) {
   }
 }
 
-async function filterUser(req, res){
-  try{
-     // Get query parameters from the request
-     const eventsCount = req.query.events_count ? parseInt(req.query.events_count) : null;
-     const creationDate = req.query.creation_date ? new Date(req.query.creation_date) : null;
 
-     let filter = {};
-
-     if (eventsCount !== null) {
-         filter.events_count = { $gte: eventsCount };
-     }
-
-     if (creationDate !== null) {
-         filter.creation_date = { $gte: creationDate };
-     }
-
-     // Use the filter in the query
-     const filteredUsers = await User.find(filter);
-
-     // Return the filtered users as JSON
-     res.json({ users: filteredUsers });
-  }catch(error){
-    res.status(500).json({ error: "Internal server error" });
-  }
-}
 // async function setNewPass (req, res) {
 //   const { token } = req.params;
 //   const { newPassword } = req.body;
@@ -314,6 +236,5 @@ module.exports = {
   // getUserByName: getUserByName,
   updateUser: updateUser,
   deleteUser: deleteUser,
-  filterUser: filterUser,
   // setNewPass: setNewPass,
 };
