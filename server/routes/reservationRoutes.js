@@ -5,14 +5,14 @@ const reservationController = require('../controllers/reservationControllers');
 
 
 // Create a new reservation
-router.post('/reservation/',reservationController.createReservation);
+router.post(reservationController.createReservation);
 // List all the Reservation
-router.get('/reservation/',reservationController.ListReservation);
+router.route('/').get(reservationController.ListReservation);
 //Get a Reservation by ID
-router.get('/reservation/:id',reservationController.getReservationById);
+router.route('/:id').get(reservationController.getReservationById);
 // Update Reservation data by ID
-router.patch('/reservation/:id',reservationController.updateReservation);
+router.route('/:id').patch(reservationController.updateReservation);
 // Delete a Reservation by ID
-router.delete('/reservation/:id',reservationController.deleteReservation);
+router.route('/:id').delete(reservationController.deleteReservation);
 
 module.exports = router;
