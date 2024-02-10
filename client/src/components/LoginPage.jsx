@@ -26,7 +26,7 @@ export default function Login() {
     window.localStorage.removeItem("refresh_token");
     setIsLoggedIn(false);
   }
-  git push origin hajar
+ 
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -39,9 +39,12 @@ export default function Login() {
       setIsLoggedIn(true);
       toast.success("Login successful");
     } catch (error) {
+      if  (error.response.status === 401){
+        toast.error("Invalid email or password");
+      }else{
       toast.error("Error occurred. Please try again.");
     }
-  }
+  }}
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
