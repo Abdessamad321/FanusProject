@@ -137,7 +137,7 @@ async function validationCustomer(req, res) {
       if (customer._id) {
         customer.valid_account = true;
         customer.save();
-        // res.redirect();
+        res.redirect();
       }
     }
   } catch (error) {

@@ -1,13 +1,15 @@
-// import { useState } from 'react'
-import './App.css'
-import Register from './Pages/register/register'
+import "./App.css";
+import Register from "./Pages/register/register";
+// import Login from "./Components/LoginPage";
+// import NavBar from "./Components/NavBar";
 function App() {
-
   return (
     <>
-      <Register/>
+      <Register />
+      {/* <Login />
+      <NavBar /> */}
     </>
-  )
+  );
 }
 
-export default App
+export default App;
