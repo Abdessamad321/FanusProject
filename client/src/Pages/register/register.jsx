@@ -16,6 +16,10 @@ function register() {
     setShowPassword(!showPassword);
     setInputType(showPassword ? "password" : "text");
   };
+
+  
+
+
   return (
     <>
       <div className="flex justify-center items-center h-screen">
@@ -120,6 +124,7 @@ function register() {
             <button
               className="bg-[#6F584C] text-white font-bold py-1 px-8 rounded-full focus:outline-none focus:shadow-outline"
               type="button"
+              // onClick={onSubmit}
             >
               Register
             </button>
