@@ -6,8 +6,8 @@ function App() {
   return (
     <>
       <Register />
-      {/* <Login />
-      <NavBar /> */}
+      {/* <Login /> */}
+      {/* // <NavBar /> */}
     </>
   );
 }
