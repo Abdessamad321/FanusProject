@@ -1,0 +1,8 @@
+.titleD{
+    display: flex;
+    justify-content: space-between;
+}
+
+.icond{
+    display: flex;
+}

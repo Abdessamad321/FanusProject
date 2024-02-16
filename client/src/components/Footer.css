@@ -1,0 +1,83 @@
+.footer {
+    background-color: #f0f0f0;
+    padding: 20px;
+  }
+  
+  .footer-1 {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .footer-1 > div {
+    flex: 1;
+  }
+  
+  .logo h2 {
+    font-size: 24px;
+    color: brown;
+  }
+  
+  .Services, .Aboutus, .Helps {
+    margin-top: 20px;
+  }
+  
+  .Services h2, .Aboutus h2, .Helps h2 {
+    font-size: 20px;
+    color: brown;
+  }
+  
+  .Services a, .Aboutus a, .Helps a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    margin-bottom: 5px;
+  }
+  
+  .footer-2 {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    text-align: center;
+    color: #666;
+  }
+
+  .socialMediaIcons img {
+    width: 25px; 
+    height: 25px; 
+    margin-right: 15px;
+    padding-top: 40px;
+
+  }
+.h{
+    display: flex;
+    justify-content: space-between;
+}
+.en{
+    display: flex;
+    padding-top: 40px;
+    margin-right: 5px;
+}
+
+.en img{
+    width: 25px; 
+    height: 25px;
+    margin-top: 15px; 
+}
+.en p {
+  margin-left: 10px;
+}
+.devise{
+    display: flex;
+    padding-top: 40px;
+}
+.devise img{
+    width: 25px; 
+    height: 25px; 
+    margin-top: 15px;
+}
+.devise p{
+  margin-left: 10px;
+}
+  .copyright{
+    margin-top: 5%;
+  }
