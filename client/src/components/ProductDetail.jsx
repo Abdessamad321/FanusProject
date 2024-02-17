@@ -6,6 +6,7 @@ import Ruban from '../assets/ruban.png';
 import R from '../assets/r.jpg';
 import CountdownTimer from './CountdownTimer ';
 import QuantitySelector from './QuantitySelector';
+import Info from './info';
 
 export default function ProductDetail() {
 
@@ -34,18 +35,20 @@ export default function ProductDetail() {
         </div>
         <div className="product flex mx-8">
             <div className="productimg w-1/2 ">
-                <img src={R} />
+                <img className=" h-3/5 w-full" src={R} alt="" />
             </div>
-            <div className="productinfo border-t-2 ">
-                <div className="quiqly flex ms-36">
-                    <h2 className="text-lg text-red-500">Quickly !! Buy your tickets quickly</h2>
+            <div className="productinfo border-t-2 ml-28 py-8">
+                <div className="quiqly flex ms-36 ">
+                    <h2 className="text-lg text-red-500 ml-[-4rem] mb-4">Quickly !! Buy your tickets quickly</h2>
                 </div>
-                <div className="chnoro">
+                <div className="chnoro mb-12">
                 <CountdownTimer eventDate={eventDate} />
                 </div>
-                <div className="infos"></div>
-                <div className="last flex">
-                    <div className="num">
+                <div className="infos mb-12">
+                    <Info />
+                </div>
+                <div className="last mb-6 flex space-x-4">
+                    <div className="num ">
                         <QuantitySelector />
                     </div>
                     <div className="addto">
