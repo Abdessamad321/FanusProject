@@ -38,10 +38,11 @@ export default function NavBar(){
         <div className="gap-6 flex h-16 w-full items-center justify-center border-y-[1px]  ">
             <h1 className="hover:underline cursor-pointer text-[#161C2D]">Home</h1>
             <h1 className="hover:underline cursor-pointer text-[#161C2D]">About us</h1>
+            <h1 className="hover:underline cursor-pointer text-[#161C2D]">Find event</h1>
             <div className="flex">
             <h1 className="hover:underline cursor-pointer text-[#161C2D]">Help center</h1> <IoChevronDownSharp style={{color:'#161C2D'}} className="mt-2"/>
             </div>
-            <h1 className="hover:underline cursor-pointer text-[#161C2D]">Find event</h1>
+            
         </div>
         </>
     )
