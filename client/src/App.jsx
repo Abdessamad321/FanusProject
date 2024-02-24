@@ -4,16 +4,13 @@ import viteLogo from '/vite.svg';
 import './App.css';
 import Login from './components/LoginPage';
 import NavBar from './components/NavBar';
-import Home from './containers/Home/HomePage';
-import Features from './containers/Home/Features';
-import CarouselGallery from './containers/Home/Carousel';
-import Steps from './containers/Home/Steps';
+import Home from './containers/Home'
 
 function App() {
 
   return (
     <>
-    <CarouselGallery/>
+    <Home/>
     </>
   )
 }
