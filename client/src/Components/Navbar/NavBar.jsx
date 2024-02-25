@@ -6,7 +6,6 @@ import { CgProfile } from "react-icons/cg";
 import { IoChevronDownSharp } from "react-icons/io5";
 import { Link } from "react-router-dom";
 import Settings from "../settings/settings";
-import Register from "../../Pages/authentification/register";
 import { useAuth } from "../../Components/LoginContext/LoginContext";
 import { useNavigate } from "react-router";
 import logo from "../../assets/logo.png"
