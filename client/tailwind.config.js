@@ -5,7 +5,8 @@ export default {
     extend: {
       colors: {
         'custom-brown': '#6f584c',
-        'biege': '#f1dbc0'
+        'biege': '#f1dbc0',
+        'casse': '#ede0d9',
       },
     },
   },

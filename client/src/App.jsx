@@ -1,15 +1,15 @@
 import './App.css';
-import Footer from './components/Footer';
-import Productdetail from './components/ProductDetail';
 import 'tailwindcss/tailwind.css';
-
-
+import ProductDetail from './components/ProductDetail';
+import Footer from './components/Footer';
+import MyCarousel from './components/MyCarousel';
 
 function App() {
+  
   return (
     <>
-      <Productdetail />
-      <Footer/>
+      <ProductDetail />
+      <Footer />
     </>
   );
 }
