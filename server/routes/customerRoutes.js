@@ -5,7 +5,7 @@ const customerControllers = require("../controllers/customerControllers");
 // const redirectToRole = require('../../middlewares/auth');
 const upload = require("../middlewares/Cloudinary");
 
-router.post("/create", customerControllers.createCustomer);//upload.single("customer_photo"), 
+router.post("/create",upload.single("customer_photo"), customerControllers.createCustomer);
 
 router.post("/login", customerControllers.loginCustomer); // redirectToRole,
 
@@ -20,16 +20,20 @@ router.get("/:id", customerControllers.getCustomerId);
 
 router.get("/validate/:id", customerControllers.validationCustomer);
 
-router.put("/:id", customerControllers.updateCustomer);
+router.put("/:id",upload.single("customer_photo"), customerControllers.updateCustomer);
 
 router.patch(
   "/update/:id",
   upload.single("customer_photo"),
   customerControllers.updateIdCustomer
-); //upload.single('photo')
+); 
 
 // router.delete("/customer/delete", customerControllers.deleteCustomer);
 
 router.patch("/delete", customerControllers.deleteCustomer);
+
+router.post("/refresh/token", customerControllers.refreshTokens);
+
+// router.post("/authpost", customerControllers.authPost);
 
 module.exports = router;
