@@ -29,13 +29,12 @@ function PopupMenu({ onClose }) {
 
   const handleItemClick = (item) => {
     console.log(`Clicked on ${item}`);
-    // Implement the logic for each menu item here
-    onClose(); // Close the popup menu after clicking on an item
+    onClose();
   };
 
   const handleClose = () => {
     logout();
-    onClose(); // Close the popup after logout
+    onClose(); 
     navigate("/");
   };
 
@@ -45,7 +44,7 @@ function PopupMenu({ onClose }) {
         <ul>
           <li onClick={() => handleItemClick("/edit-profile")}>
             <Link
-              className="flex justify-center items-center px-4 py-4 text-center hover:bg-gray-100 border-b border-gray-200 cursor-pointer"
+              className="flex justify-start items-center px-4 py-4 text-center hover:bg-gray-100 border-b border-gray-200 cursor-pointer"
               to="/edit-profile"
             >
               <div className="flex px-2">
@@ -56,8 +55,7 @@ function PopupMenu({ onClose }) {
           </li>
           <li onClick={() => handleItemClick("Reservations")}>
             <Link
-              className="flex justify-center items-center px-4 py-4 text-center hover:bg-gray-100 border-b border-gray-200 cursor-pointer"
-              // to="/settings/"
+              className="flex justify-start items-center px-4 py-4 text-center hover:bg-gray-100 border-b border-gray-200 cursor-pointer"
             >
               <div className="flex px-2">
                 <CalendarOutlined />
@@ -66,7 +64,7 @@ function PopupMenu({ onClose }) {
             </Link>
           </li>
           <li onClick={handleClose}>
-            <Link className="flex justify-center items-center px-4 py-4 text-center hover:bg-gray-100 cursor-pointer">
+            <Link className="flex justify-start items-center px-4 py-4 text-center hover:bg-gray-100 cursor-pointer">
               <div className="flex px-2">
                 <LogoutOutlined />
               </div>

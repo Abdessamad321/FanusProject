@@ -1,4 +1,3 @@
-// EditProfile.jsx
 import React, { useState, useContext, useEffect } from "react";
 import { Context } from "../../Components/LoginContext/LoginContext";
 import axios from "axios";

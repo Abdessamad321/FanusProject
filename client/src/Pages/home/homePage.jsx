@@ -178,6 +178,9 @@ fetchEvent();
             </div>
         </div>
         </div>
+
+
+
        {/* Events */}
         <div className="border-y-2 border-solid p-4">
         <h1 className="text-[#161C2D] text-3xl font-extrabold text-center m-5">Explore Our Event Showcase</h1>
@@ -219,7 +222,7 @@ fetchEvent();
             {/* price */}
             <div className="flex items-center">
             <MdAttachMoney />
-            <p className="px-2 font-semibold text-[#161C2D]">{event.price} Mad</p> 
+            <p className="px-2 font-semibold text-[#161C2D]">{event.price} MAD</p> 
             </div>
             {/* button */}
             <button className="bg-[#6F584C] font-bold rounded-lg w-28 h-8 text-[#F5EFEC] hover:border-2 hover:border-[#6F584C] hover:bg-[#F5EFEC] hover:text-[#6F584C] ">Add to cart</button>

@@ -1,4 +1,3 @@
-// App.jsx
 import React, { useState, useContext } from "react";
 import "./App.css";
 import Navbar from "./Components/Navbar/NavBar";

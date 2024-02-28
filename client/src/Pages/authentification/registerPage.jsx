@@ -15,7 +15,7 @@ function registerPage() {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [showRegisterForm, setShowRegisterForm] = useState(true);
+  // const [showRegisterForm, setShowRegisterForm] = useState(true);
   const [inputType, setInputType] = useState("password");
   const [formData, setFormData] = useState({
     name: "",
@@ -66,11 +66,10 @@ function registerPage() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleClose = () => {
-    window.history.go(-2)
-  };
 
-
+  const handleClose=()=>{
+    window.history.back()
+  }
   return (
     <>
       <ToastContainer />

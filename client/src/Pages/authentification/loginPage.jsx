@@ -86,9 +86,9 @@ function Login() {
     if (show) {
       setShow(false);
       if (prevLoginPage === "/create") {
-        window.history.go(-2); // Navigate back two steps if previous login page was register
+        window.history.go(-2);
       } else {
-        window.history.back(); // Navigate back one step
+        window.history.back(); 
       }
     }
   };

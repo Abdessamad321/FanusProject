@@ -49,7 +49,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="socialMediaIcons flex">
-                    {/* <a href='/instagram'><img  src={ig} alt="instagram" className="w-6 h-6 mr-2"/></a> */}
+                    {/* <a href='/instagram'><img src={ig} alt="instagram" className="w-6 h-6 mr-2"/></a> */}
                     {/* <a href='facebook'><img  src={fb} alt="facebook" className="w-6 h-6 mr-2"/></a> */}
                     {/* <a href='x'><img src={x} alt="x" className="w-6 h-6 mr-2"/></a> */}
                 </div>
