@@ -5,10 +5,10 @@ const {
   checkSuperAdminRole,
 } = require("../middlewares/checkRole");
 
-const { redirectToRole } = require("../middlewares/auth");
+// const { redirectToRole } = require("../middlewares/auth");
 const userControllers = require("../controllers/userControllers");
 
-router.route("/create").post(checkAdminRole, userControllers.createUser);
+router.route("/create").post(userControllers.createUser);
 
 router.route("/login").post(userControllers.loginUser);
 
