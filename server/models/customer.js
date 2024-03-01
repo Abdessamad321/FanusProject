@@ -22,7 +22,7 @@ const customerSchema = new mongoose.Schema(
     nationality: {
       type: String,
     },
-    photo: {
+    customer_photo: {
       type: String,
     },
     isDeleted:{
@@ -32,6 +32,14 @@ const customerSchema = new mongoose.Schema(
     valid_account: {
       type: Boolean,
       default: false,
+    },
+    resetToken:{
+      type: String,
+      default: null
+    },
+    resetTokenExpiration:{
+      type:Date,
+      default: null
     }
   },
   { timestamps: true }
