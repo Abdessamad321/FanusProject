@@ -6,10 +6,10 @@ import "react-toastify/dist/ReactToastify.css";
 import upload from "../../assets/account.png";
 import FanousButton from "../Button/Button";
 import { monthOptions, countries } from "./data";
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Select from "react-select";
-
+import { TextInput } from "../inputs/inputs";
 function EditProfile() {
   const authContext = useContext(Context);
 
@@ -114,8 +114,6 @@ function EditProfile() {
     setSelectedYear(selectedOption);
   };
 
-
-
   //PHONE NUMBER*************************************************
   const [selectedCountry, setSelectedCountry] = useState(countries[0]);
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -130,10 +128,13 @@ function EditProfile() {
     setPhoneNumber(e.target.value);
   };
 
+  const handleNameChange = (e) => {
+    setCustomer({ ...customer, name: e.target.value });
+  };
   return (
     <div className="px-12">
       <div className="flex justify-between items-center">
-        <span className=" text-4xl font-bold">Edit profile</span>
+        <span className="text-4xl font-bold">Edit profile</span>
         <div className="image bg-gray-300 rounded-full overflow-hidden">
           <label htmlFor="image-input" className=" cursor-pointer">
             <div className=" w-32 h-32 rounded-full overflow-hidden bg-gray-300 relative">
@@ -167,7 +168,15 @@ function EditProfile() {
           <label className="text-lg font-bold" htmlFor="fullName">
             Full Name
           </label>
-          <input
+          <TextInput
+            type="name"
+            id="fullName"
+            name="fullName"
+            placeholder="Lorem Jitam"
+            value={customer.name}
+            onChange={ (e) => setCustomer({ ...customer, name: e.target.value })}
+          />
+          {/* <input
             className="border-[1px] rounded-md border-gray-200 p-3  shadow-sm shadow-slate-100"
             type="text"
             id="fullName"
@@ -175,7 +184,7 @@ function EditProfile() {
             placeholder="Lorem Jitam"
             value={customer.name}
             onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-          />
+          /> */}
         </div>
 
         <div className="flex flex-col mb-6 gap-1">
