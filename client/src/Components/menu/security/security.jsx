@@ -1,21 +1,71 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import FanousButton from "../../Button/Button";
 import { TextInput } from "../../inputs/inputs";
-
-import { EyeFilled, EyeInvisibleFilled } from "@ant-design/icons";
+import { useNavigate, useParams } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import { DeleteOutlined } from "@ant-design/icons";
+import axios from "axios";
 
 function security() {
-  const [showPassword, setShowPassword] = useState(false);
+  const { token } = useParams();
+  // const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [isValidToken, setIsValidToken] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [inputType, setInputType] = useState("password");
+  const navigate = useNavigate();
 
-  const toggleShowPassword = () => {
-    setShowPassword(!showPassword);
-    setInputType(showPassword ? "password" : "text");
+  useEffect(() => {
+    verifyToken();
+  }, []);
+
+  const verifyToken = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:7000/customer/password/reset/verify/${token}`
+      );
+      // toast.success(response.data.message);
+      setIsValidToken(true);
+    } catch (error) {
+      toast.error("Token verification failed:", error);
+      setIsValidToken(false);
+      console.log(error)
+    }
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+  const handleResetPassword = async () => {
+    try {
+      await verifyToken();
+      if (isValidToken) {
+        setLoading(true);
+
+        if (!newPassword.trim() || newPassword.trim().length < 6) {
+          toast.error(
+            "Password must not be empty and must be at least 6 characters"
+          );
+          return;
+        }
+        if (newPassword !== confirmPassword) {
+          toast.error("Passwords do not match");
+          return;
+        }
+        const response = await axios.post(
+          `http://localhost:7000/customer/password/reset/update/${token}`,
+          {
+            newPassword: newPassword,
+          }
+        );
+        toast.success(response.data.message);
+        navigate("/home");
+      } else {
+        toast.error("Invalid token");
+      }
+    } catch (error) {
+      toast.error("Password reset failed:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,24 +85,11 @@ function security() {
           <TextInput
             id="password"
             type={inputType}
-            placeholder="Enter your Password"
+            placeholder="Enter Current Password"
             name="password"
-            // value={formData.password}
-            // onChange={handleChange}
+            // value={currentPassword}
+            // onChange={setCurrentPassword}
           />
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-            {showPassword ? (
-              <EyeInvisibleFilled
-                className="flex justify-center items-center h-6 w-6 cursor-pointer"
-                onClick={toggleShowPassword}
-              />
-            ) : (
-              <EyeFilled
-                className="flex justify-center items-center h-6 w-6 cursor-pointer"
-                onClick={toggleShowPassword}
-              />
-            )}
-          </div>
         </div>
       </div>
 
@@ -62,24 +99,11 @@ function security() {
           <TextInput
             id="password"
             type={inputType}
-            placeholder="Enter your Password"
+            placeholder="Enter New Password"
             name="password"
-            // value={formData.password}
-            // onChange={handleChange}
+            value={newPassword}
+            onChange={(value) => setNewPassword(value)}
           />
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-            {showPassword ? (
-              <EyeInvisibleFilled
-                className="flex justify-center items-center h-6 w-6 cursor-pointer"
-                onClick={toggleShowPassword}
-              />
-            ) : (
-              <EyeFilled
-                className="flex justify-center items-center h-6 w-6 cursor-pointer"
-                onClick={toggleShowPassword}
-              />
-            )}
-          </div>
         </div>
       </div>
 
@@ -89,37 +113,29 @@ function security() {
           <TextInput
             id="password"
             type={inputType}
-            placeholder="Enter your Password"
+            placeholder="Confirm New Password"
             name="password"
-            // value={formData.password}
-            // onChange={handleChange}
+            value={confirmPassword}
+            onChange={(value) => setConfirmPassword(value)}
           />
-          <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-            {showPassword ? (
-              <EyeInvisibleFilled
-                className="flex justify-center items-center h-6 w-6 cursor-pointer"
-                onClick={toggleShowPassword}
-              />
-            ) : (
-              <EyeFilled
-                className="flex justify-center items-center h-6 w-6 cursor-pointer"
-                onClick={toggleShowPassword}
-              />
-            )}
-          </div>
         </div>
       </div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <FanousButton>Update Password</FanousButton>
+          <FanousButton onClick={handleResetPassword}>
+            Update Password
+          </FanousButton>
           <span>Forgot Current Password?</span>
         </div>
-        <div>
-          <span className="text-red-500">Delete Account</span>
+        <div className="flex justify-center items-center gap-1 text-red-500">
+          <DeleteOutlined className="flex" />
+          <span>Delete Account</span>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }
 
 export default security;
+

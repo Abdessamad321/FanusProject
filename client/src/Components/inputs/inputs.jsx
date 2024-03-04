@@ -1,29 +1,24 @@
 import React, { useState, useEffect } from "react";
 
-export function TextInput({ id, name, placeholder, value, onChange }) {
-  const [textInput, setTextInput] = useState(value || ''); 
-  
 
-  const handleTextInputChange = (event) => {
-    const newValue = event.target.value;
-    setTextInput(newValue);
-    onChange(newValue);
+export function TextInput({ id, name, placeholder, value, onChange }) {
+  const handleInputChange = (e) => {
+    onChange(e.target.value);
   };
 
   return (
-    <div>
-      <input
-        className="border-[1px] rounded-md border-gray-200 p-3 w-full shadow-sm shadow-slate-100"
-        type="text"
-        id={id}
-        name={name}
-        placeholder={placeholder}
-        value={textInput}
-        onChange={handleTextInputChange}
-      />
-    </div>
+    <input
+      type="text"
+      id={id}
+      name={name}
+      placeholder={placeholder}
+      value={value}
+      onChange={handleInputChange}
+      className="border-[1px] rounded-md border-gray-200 p-3 w-full shadow-sm shadow-slate-100"
+    />
   );
 }
+ 
 
 
 

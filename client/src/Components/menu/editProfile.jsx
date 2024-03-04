@@ -128,9 +128,7 @@ function EditProfile() {
     setPhoneNumber(e.target.value);
   };
 
-  const handleNameChange = (e) => {
-    setCustomer({ ...customer, name: e.target.value });
-  };
+
   return (
     <div className="px-12">
       <div className="flex justify-between items-center">
@@ -174,7 +172,7 @@ function EditProfile() {
             name="fullName"
             placeholder="Lorem Jitam"
             value={customer.name}
-            onChange={ (e) => setCustomer({ ...customer, name: e.target.value })}
+            onChange={(value) => setCustomer({ ...customer, name: value })}
           />
           {/* <input
             className="border-[1px] rounded-md border-gray-200 p-3  shadow-sm shadow-slate-100"
@@ -191,7 +189,15 @@ function EditProfile() {
           <label className="text-lg font-bold" htmlFor="emailAddress">
             Email Address
           </label>
-          <input
+          <TextInput
+           type="email"
+           id="emailAddress"
+           name="emailAddress"
+           placeholder="Lorem@gmail.com"
+           value={customer.email}
+            onChange={(value) => setCustomer({ ...customer, email: value })}
+          />
+          {/* <input
             className="border-[1px] rounded-md border-gray-200 p-3 shadow-sm shadow-slate-100"
             type="email"
             id="emailAddress"
@@ -201,7 +207,7 @@ function EditProfile() {
             onChange={(e) =>
               setCustomer({ ...customer, email: e.target.value })
             }
-          />
+          /> */}
         </div>
 
         <div className="flex flex-col mb-6 gap-1">
@@ -262,6 +268,14 @@ function EditProfile() {
                 </option>
               ))}
             </select>
+            {/* <TextInput
+           type="phone"
+           id="phoneNumber"
+           name="phoneNumber"
+           placeholder="6-66-66-66-66"
+           value={customer.phone}
+            onChange={(value) => setCustomer({ ...customer, phone: value })}
+          /> */}
             <input
               className="border-l-0 rounded-r-md w-full p-3 shadow-sm shadow-slate-100 "
               type="tel"

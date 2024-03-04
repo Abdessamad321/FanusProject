@@ -34,6 +34,13 @@ router.patch("/delete", customerControllers.deleteCustomer);
 
 router.post("/refresh/token", customerControllers.refreshTokens);
 
+
+router.post('/password/reset', customerControllers.resetRquist)
+
+router.get('/password/reset/verify/:token', customerControllers.verifyResetToken)
+
+router.post('/password/reset/update/:token', customerControllers.setNewPass)
+
 // router.post("/authpost", customerControllers.authPost);
 
 module.exports = router;
