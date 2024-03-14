@@ -8,8 +8,11 @@ import FanousButton from "../Button/Button";
 import { monthOptions, countries } from "./data";
 // import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import Select from "react-select";
+// import Select from "react-select";
 import { TextInput } from "../inputs/inputs";
+import { Dropdown, SelectDropdown } from "../../Components/dropdowns/dropdown";
+
+// import Selector from "../dropdowns/selector";
 function EditProfile() {
   const authContext = useContext(Context);
 
@@ -63,7 +66,6 @@ function EditProfile() {
       formData.append("email", customer.email);
       formData.append("phone", customer.phone);
       formData.append("nationality", customer.nationality);
-      // formData.append("customer_photo", customer.customer_photo || null);
       if (customer.customer_photo) {
         formData.append("customer_photo", customer.customer_photo);
       }
@@ -124,10 +126,10 @@ function EditProfile() {
     setSelectedCountry(country);
   };
 
-  const handlePhoneNumberChange = (e) => {
-    setPhoneNumber(e.target.value);
-  };
-
+  const options = countries.map((country) => ({
+    value: country.code,
+    label: country.code,
+  }));
 
   return (
     <div className="px-12">
@@ -142,7 +144,6 @@ function EditProfile() {
                     customer.customer_photo instanceof File
                       ? URL.createObjectURL(customer.customer_photo)
                       : customer.customer_photo
-                    // : `http://localhost:7000/${customer.customer_photo}`
                   }
                   alt=""
                   className="w-full h-full object-cover"
@@ -167,6 +168,7 @@ function EditProfile() {
             Full Name
           </label>
           <TextInput
+            className="rounded-md"
             type="name"
             id="fullName"
             name="fullName"
@@ -174,15 +176,6 @@ function EditProfile() {
             value={customer.name}
             onChange={(value) => setCustomer({ ...customer, name: value })}
           />
-          {/* <input
-            className="border-[1px] rounded-md border-gray-200 p-3  shadow-sm shadow-slate-100"
-            type="text"
-            id="fullName"
-            name="fullName"
-            placeholder="Lorem Jitam"
-            value={customer.name}
-            onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-          /> */}
         </div>
 
         <div className="flex flex-col mb-6 gap-1">
@@ -190,24 +183,14 @@ function EditProfile() {
             Email Address
           </label>
           <TextInput
-           type="email"
-           id="emailAddress"
-           name="emailAddress"
-           placeholder="Lorem@gmail.com"
-           value={customer.email}
-            onChange={(value) => setCustomer({ ...customer, email: value })}
-          />
-          {/* <input
-            className="border-[1px] rounded-md border-gray-200 p-3 shadow-sm shadow-slate-100"
+            className="rounded-md"
             type="email"
             id="emailAddress"
             name="emailAddress"
             placeholder="Lorem@gmail.com"
             value={customer.email}
-            onChange={(e) =>
-              setCustomer({ ...customer, email: e.target.value })
-            }
-          /> */}
+            onChange={(value) => setCustomer({ ...customer, email: value })}
+          />
         </div>
 
         <div className="flex flex-col mb-6 gap-1">
@@ -242,8 +225,12 @@ function EditProfile() {
           <label className="text-lg font-bold" htmlFor="phoneNumber">
             Phone Number
           </label>
-          <div className="flex rounded-md border border-gray-200 shadow-sm shadow-slate-100">
-            <select
+          <div className="flex ">
+            {/* <div className="flex rounded-md border border-gray-200 shadow-sm shadow-slate-100"> */}
+            {/* <select
+              value={selectedCountry.code}
+              onChange={handleCountryChange}
+              className="border-r-0 rounded-l-md pl-2 focus:outline-none focus:ring-0 text-gray-800"
               styles={{
                 control: (provided, state) => ({
                   ...provided,
@@ -258,35 +245,45 @@ function EditProfile() {
                   },
                 }),
               }}
-              value={selectedCountry.code}
-              onChange={handleCountryChange}
-              className="border-r-0 rounded-l-md pl-2 focus:outline-none focus:ring-0 text-gray-800"
             >
               {countries.map((country) => (
                 <option key={country.code} value={country.code}>
                   {country.code}
                 </option>
               ))}
-            </select>
-            {/* <TextInput
-           type="phone"
-           id="phoneNumber"
-           name="phoneNumber"
-           placeholder="6-66-66-66-66"
-           value={customer.phone}
-            onChange={(value) => setCustomer({ ...customer, phone: value })}
-          /> */}
-            <input
-              className="border-l-0 rounded-r-md w-full p-3 shadow-sm shadow-slate-100 "
-              type="tel"
+            </select> */}
+            <Dropdown
+            id="serialcode"
+            name="serialcode"
+              className="border-r-0 rounded-l-md text-gray-800"
+              options={countries.map((country) => ({
+                value: country.code,
+                label: country.code,
+              }))}
+              value={selectedCountry.code }
+              onChange={handleCountryChange}
+            />
+            <TextInput
+              className="border-l-0 rounded-r-md text-gray-800"
+              type="phone"
               id="phoneNumber"
               name="phoneNumber"
               placeholder="6-66-66-66-66"
               value={customer.phone}
-              onChange={(e) =>
-                setCustomer({ ...customer, phone: e.target.value })
-              }
+              onChange={(value) => setCustomer({ ...customer, phone: value })}
             />
+            {/* <input
+                className="border-l-0 rounded-r-md w-full p-3 shadow-sm shadow-slate-100 "
+                type="tel"
+                id="phoneNumber"
+                name="phoneNumber"
+                placeholder="6-66-66-66-66"
+                value={customer.phone}
+                onChange={(e) =>
+                  setCustomer({ ...customer, phone: e.target.value })
+                }
+              /> */}
+            {/* </div> */}
           </div>
         </div>
 
@@ -296,64 +293,24 @@ function EditProfile() {
           </label>
           <div className="flex gap-2">
             {/* Month */}
-            <Select
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  borderRadius: "0.375rem",
-                  padding: "0.25rem",
-                  boxShadow: state.isFocused
-                    ? "0 0 0 2px rgba(0, 0, 0, 100)"
-                    : "0 1px 2px 0 rgba(0, 0, 0, 0.1)",
-                  border: state.isFocused ? "#000000" : "1px solid #e3e3e3",
-                  "&:hover": {
-                    borderColor: "none",
-                  },
-                }),
-              }}
+            <Dropdown
+              className=" border-gray-200 rounded-md shadow-sm shadow-slate-100"
               options={monthOptions}
               value={selectedMonth}
               onChange={handleMonthChange}
               placeholder="Month"
             />
-
             {/* Day */}
-            <Select
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  borderRadius: "0.375rem",
-                  padding: "0.25rem",
-                  boxShadow: state.isFocused
-                    ? "0 0 0 2px rgba(0, 0, 0, 100)"
-                    : "0 1px 2px 0 rgba(0, 0, 0, 0.1)",
-                  border: state.isFocused ? "#000000" : "1px solid #e3e3e3",
-                  "&:hover": {
-                    borderColor: "none",
-                  },
-                }),
-              }}
+            <Dropdown
+              className=" border-gray-200 rounded-md shadow-sm shadow-slate-100"
               options={dayOptions}
               value={selectedDay}
               onChange={handleDayChange}
               placeholder="Day"
             />
             {/* Year */}
-            <Select
-              styles={{
-                control: (provided, state) => ({
-                  ...provided,
-                  borderRadius: "0.375rem",
-                  padding: "0.25rem",
-                  boxShadow: state.isFocused
-                    ? "0 0 0 2px rgba(0, 0, 0, 100)"
-                    : "0 1px 2px 0 rgba(0, 0, 0, 0.1)",
-                  border: state.isFocused ? "#000000" : "1px solid #e3e3e3",
-                  "&:hover": {
-                    borderColor: "none",
-                  },
-                }),
-              }}
+            <Dropdown
+              className=" border-gray-200 rounded-md shadow-sm shadow-slate-100"
               options={yearOptions}
               value={selectedYear}
               onChange={handleYearChange}
@@ -371,36 +328,21 @@ function EditProfile() {
               (optional)
             </span>
           </div>
-          <Select
-            styles={{
-              control: (provided, state) => ({
-                ...provided,
-                borderRadius: "0.375rem",
-                padding: "0.25rem",
-                boxShadow: state.isFocused
-                  ? "0 0 0 2px rgba(0, 0, 0, 100)"
-                  : "0 1px 2px 0 rgba(0, 0, 0, 0.1)",
-                border: state.isFocused ? "#000000" : "1px solid #e3e3e3",
-                "&:hover": {
-                  borderColor: "none",
-                },
-              }),
-            }}
+          <Dropdown
             id="nationality"
             name="nationality"
-            value={
-              customer.nationality
-                ? { value: customer.nationality, label: customer.nationality }
-                : null
-            }
-            onChange={handleSelectChange}
+            placeholder="Select nationality"
             options={countries.map((country) => ({
               value: country.nationality,
               label: country.nationality,
             }))}
-            placeholder="Select nationality"
+            value={customer.nationality}
+            onChange={handleSelectChange}
+            className="rounded-md"
           />
         </div>
+
+        <div className="flex flex-col mb-6 gap-1">{/* <Selector /> */}</div>
 
         <FanousButton type="submit" onClick={saveChanges}>
           Save

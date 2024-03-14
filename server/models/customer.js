@@ -10,6 +10,12 @@ const customerSchema = new mongoose.Schema(
       type: String,
       unique: true,
     },
+    // birthday: {
+    //   type: Date, 
+    // },
+    // gender: {
+    //   type: String,
+    // },
     email: {
       type: String,
       required: true,
@@ -25,22 +31,22 @@ const customerSchema = new mongoose.Schema(
     customer_photo: {
       type: String,
     },
-    isDeleted:{
+    isDeleted: {
       type: Boolean,
-      default: false
+      default: false,
     },
     valid_account: {
       type: Boolean,
       default: false,
     },
-    resetToken:{
+    resetToken: {
       type: String,
-      default: null
+      default: null,
     },
-    resetTokenExpiration:{
-      type:Date,
-      default: null
-    }
+    resetTokenExpiration: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 );

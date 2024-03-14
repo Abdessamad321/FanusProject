@@ -1,26 +1,54 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 
-
-export function TextInput({ id, name, placeholder, value, onChange }) {
+export function TextInput({ id, name, type, placeholder, value, onChange, className }) {
   const handleInputChange = (e) => {
     onChange(e.target.value);
   };
 
   return (
     <input
-      type="text"
+      type={type}
       id={id}
       name={name}
       placeholder={placeholder}
       value={value}
       onChange={handleInputChange}
-      className="border-[1px] rounded-md border-gray-200 p-3 w-full shadow-sm shadow-slate-100"
+      className={`border-[1px] border-gray-200 p-3 w-full shadow-sm shadow-slate-100 ${className}`}
     />
   );
 }
- 
 
 
+export function SelectInput({ id, name, value, options }) {
+  const handleSelectInputChange = (e) => {
+    onChange(e.target.value);
+  };
+
+  return (
+    <div>
+      <select
+        id={id}
+        name={name}
+        value={value}
+        onChange={handleSelectInputChange}
+        onfocus='this.size=6;' onblur='this.size=6;' onfocusout='this.size=null;' onchange='this.size=6; this.blur();'
+        
+      >
+        
+          {options.map((option) => (
+          <option
+            key={option.value}
+            value={option.value}
+          >
+            {option.label}
+          </option>
+        ))}
+       
+        
+      </select>
+    </div>
+  );
+}
 
 // function TextAreaInput() {
 //   const [textareaInput, setTextareaInput] = useState("");
@@ -36,29 +64,6 @@ export function TextInput({ id, name, placeholder, value, onChange }) {
 //         value={textareaInput}
 //         onChange={handleTextareaInputChange}
 //       ></textarea>
-//     </div>
-//   );
-// }
-
-// function SelectInput() {
-//   const [selectInput, setSelectInput] = useState("");
-
-//   const handleSelectInputChange = (event) => {
-//     setSelectInput(event.target.value);
-//   };
-
-//   return (
-//     <div>
-//       <select
-//         id="selectInput"
-//         value={selectInput}
-//         onChange={handleSelectInputChange}
-//       >
-//         <option value="">Select an option</option>
-//         <option value="option1">Option 1</option>
-//         <option value="option2">Option 2</option>
-//         <option value="option3">Option 3</option>
-//       </select>
 //     </div>
 //   );
 // }

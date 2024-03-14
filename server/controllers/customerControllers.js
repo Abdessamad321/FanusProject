@@ -16,7 +16,6 @@ async function createCustomer(req, res) {
   const realName = xss(name);
   const realPhone = xss(phone);
   const realEmail = xss(email);
-  // const realNationality = xss(nationality);
   const realPass = xss(password);
   const customer_photo = req.file ? req.file.path : null;
 
@@ -24,7 +23,6 @@ async function createCustomer(req, res) {
     realName,
     realPhone,
     realEmail,
-    // realNationality,
     realPass
   );
   if (validationErrors.length > 0) {
@@ -219,8 +217,8 @@ async function allCustomers(req, res) {
 
 async function updateCustomer(req, res) {
   const customerId = req.params.id;
-  const { name, phone, email, nationality } = req.body;
-  let updateData = { name, phone, email, nationality };
+  const { name, phone, email, nationality } = req.body;//gender ,birthay 
+  let updateData = { name, phone, email, nationality };//gender ,birthay 
     
   if (req.file) {
       updateData.customer_photo = req.file.path;
@@ -240,12 +238,9 @@ async function updateCustomer(req, res) {
   }
 }
 
-async function updateIdCustomer(req, res) {
+async function updatePassCustomer(req, res) {
   const customerId = req.params.id;
-  const { old_password, new_password, name, phone, email, nationality } =
-    req.body;
-
-  const customer_photo = req.file ? req.file.path : null;
+  const { old_password, new_password } = req.body;
 
   try {
     const customer = await Customer.findById(customerId);
@@ -257,21 +252,15 @@ async function updateIdCustomer(req, res) {
     }
 
     const hashedNewPassword = await bcrypt.hash(new_password, 10);
-    customer.customer_photo = customer_photo;
-    customer.name = name;
-    customer.phone = phone;
-    customer.email = email;
-    customer.nationality = nationality;
     customer.password = hashedNewPassword;
 
     await customer.save();
-    customer.valid_account = true;
-    res.json(customer);
-    console.log(customer);
+    res.status(200).json({ message: 'Password updated successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
+
 
 async function deleteCustomer(req, res) {
   const token = req.headers.authorization.split(" ")[1];
@@ -383,6 +372,7 @@ async function verifyResetToken(req, res) {
 }
 
 
+
 async function setNewPass (req, res) {
   const { token } = req.params;
   const { newPassword } = req.body;
@@ -441,12 +431,13 @@ module.exports = {
   getCustomerId: getCustomerId,
   allCustomers: allCustomers,
   updateCustomer: updateCustomer,
-  updateIdCustomer: updateIdCustomer,
+  updatePassCustomer: updatePassCustomer,
   deleteCustomer: deleteCustomer,
   profileCustomer: profileCustomer,
   refreshTokens: refreshTokens,
   resetRquist:resetRquist,
   verifyResetToken: verifyResetToken,
+  // changePass: changePass,
   setNewPass: setNewPass,
   // authPost:authPost
 };

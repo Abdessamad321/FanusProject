@@ -24,8 +24,7 @@ router.put("/:id",upload.single("customer_photo"), customerControllers.updateCus
 
 router.patch(
   "/update/:id",
-  upload.single("customer_photo"),
-  customerControllers.updateIdCustomer
+  customerControllers.updatePassCustomer
 ); 
 
 // router.delete("/customer/delete", customerControllers.deleteCustomer);
@@ -33,7 +32,6 @@ router.patch(
 router.patch("/delete", customerControllers.deleteCustomer);
 
 router.post("/refresh/token", customerControllers.refreshTokens);
-
 
 router.post('/password/reset', customerControllers.resetRquist)
 
