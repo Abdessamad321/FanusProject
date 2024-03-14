@@ -10,7 +10,7 @@ import { monthOptions, countries } from "./data";
 import "react-datepicker/dist/react-datepicker.css";
 // import Select from "react-select";
 import { TextInput } from "../inputs/inputs";
-import { Dropdown, SelectDropdown } from "../../Components/dropdowns/dropdown";
+import { Dropdown } from "../../Components/dropdowns/dropdown";
 
 // import Selector from "../dropdowns/selector";
 function EditProfile() {
