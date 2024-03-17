@@ -9,11 +9,14 @@ import RegisterPage from "./Pages/authentification/registerPage.jsx";
 import HomePage from "./Pages/home/homePage.jsx";
 import LoginPage from "./Pages/authentification/loginPage.jsx";
 import LandingPage from "./Pages/landingPage/landing.jsx";
+import ProductDetail from './Components/oussama/ProductDetail.jsx';
+
 function App() {
   const authCtx = useContext(Context);
 
   return (
     <>
+    {/* <ProductDetail/> */}
       <BrowserRouter>
         <Navbar />
         <Routes>
