@@ -13,7 +13,7 @@ export function TextInput({ id, name, type, placeholder, value, onChange, classN
       placeholder={placeholder}
       value={value}
       onChange={handleInputChange}
-      className={`border-[1px] border-gray-200 p-3 w-full shadow-sm shadow-slate-100 ${className}`}
+      className={`border-[1px] border-gray-200 p-3 w-full shadow-sm shadow-slate-100 focus:outline-none focus:border-gray-300 focus:ring focus:ring-gray-200 active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150 ${className}`}
     />
   );
 }

@@ -144,7 +144,7 @@ export function Dropdown({ placeholder, options, value, onChange, className }) {
             <input
               type="text"
               placeholder="Search..."
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-gray-500"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
             />

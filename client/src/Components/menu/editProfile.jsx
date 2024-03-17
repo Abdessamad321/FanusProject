@@ -253,8 +253,9 @@ function EditProfile() {
               value={customer.code}
               onChange={(e) => handleSelectChange("code", e.value)}
             />
+          
             <TextInput
-              className="border-l-0 rounded-r-md text-gray-800"
+              className="border-l-0 rounded-r-md text-gray-800 "
               type="phone"
               id="phoneNumber"
               name="phoneNumber"
