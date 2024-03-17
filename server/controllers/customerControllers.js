@@ -16,7 +16,7 @@ async function createCustomer(req, res) {
   const realName = xss(name);
   const realPhone = xss(phone);
   const realEmail = xss(email);
-  const realPass = xss(password);
+  const realPass = xss(password); 
   const customer_photo = req.file ? req.file.path : null;
 
   const validationErrors = customerValidation.validateCustomer(
@@ -217,8 +217,8 @@ async function allCustomers(req, res) {
 
 async function updateCustomer(req, res) {
   const customerId = req.params.id;
-  const { name, phone, email, nationality } = req.body;//gender ,birthay 
-  let updateData = { name, phone, email, nationality };//gender ,birthay 
+  const { name, code, phone, email, gender, birthday, nationality } = req.body;
+  let updateData = { name, code, phone, email, gender, birthday, nationality };
     
   if (req.file) {
       updateData.customer_photo = req.file.path;

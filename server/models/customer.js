@@ -6,16 +6,16 @@ const customerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    code: {
+      type: String,
+    },
     phone: {
       type: String,
       unique: true,
     },
-    // birthday: {
-    //   type: Date, 
-    // },
-    // gender: {
-    //   type: String,
-    // },
+    gender: {
+      type: String,
+    },
     email: {
       type: String,
       required: true,
@@ -24,6 +24,9 @@ const customerSchema = new mongoose.Schema(
     password: {
       type: String,
       required: true,
+    },
+    birthday: {
+      type: Date, 
     },
     nationality: {
       type: String,
