@@ -273,18 +273,23 @@ async function updateIdCustomer(req, res) {
   }
 }
 
+//deletecustomer
 async function deleteCustomer(req, res) {
-  const token = req.headers.authorization.split(" ")[1];
   try {
-    const decodedToken = jwt.verify(token, secretKey);
-    const customerId = decodedToken.customerId;
-    // const deletedCustomer = await Customer.findByIdAndDelete(customerId);
-    // if (deletedCustomer) {
-    //   res.json(`Customer with ID ${customerId} deleted successfully`);
-    // } else {
-    //   res.status(404).json(`Customer with ID ${customerId} not found`);
-    // }
+    const customerId = req.params.id;
+    const { password } = req.body;
+    const customer = await Customer.findById(customerId);
 
+    if (!customer) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, customer.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+
+    // Mark the customer as deleted in the database
     const updatedCustomer = await Customer.findByIdAndUpdate(
       customerId,
       { isDeleted: true },
@@ -292,16 +297,40 @@ async function deleteCustomer(req, res) {
     );
 
     if (updatedCustomer) {
-      res.json(`Customer with ID ${customerId} marked as deleted`);
-      // res.redirect()
+      res.json({ message: `Customer with ID ${customerId} marked as deleted` });
     } else {
-      res.status(404).json(`Customer with ID ${customerId} not found`);
+      res.status(404).json({ error: `Customer with ID ${customerId} not found` });
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: error });
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 }
+
+
+async function verifyPassword(req, res) {
+  try {
+    const customerId = req.params.id;
+    const { password } = req.body;
+    const customer = await Customer.findById(customerId);
+
+    if (!customer) {
+      return res.status(404).json({ error: "Customer not found" });
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, customer.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+
+    // Password is valid
+    return res.status(200).json({ message: "Password verified successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
 
 async function refreshTokens(req, res) {
   try {
@@ -419,6 +448,7 @@ module.exports = {
   updateCustomer: updateCustomer,
   updateIdCustomer: updateIdCustomer,
   deleteCustomer: deleteCustomer,
+  verifyPassword: verifyPassword,
   profileCustomer: profileCustomer,
   refreshTokens: refreshTokens,
   verifyResetToken: verifyResetToken,
