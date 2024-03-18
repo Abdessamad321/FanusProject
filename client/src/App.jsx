@@ -9,7 +9,9 @@ import RegisterPage from "./Pages/authentification/registerPage.jsx";
 import HomePage from "./Pages/home/homePage.jsx";
 import LoginPage from "./Pages/authentification/loginPage.jsx";
 import LandingPage from "./Pages/landingPage/landing.jsx";
-import ProductDetail from './Components/oussama/ProductDetail.jsx';
+import Deletion from "./Components/menu/security/deletion.jsx";
+// import ProductDetail from './Components/oussama/ProductDetail.jsx';
+
 
 function App() {
   const authCtx = useContext(Context);
@@ -25,6 +27,7 @@ function App() {
           <Route path="/create" element={<RegisterPage />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path="/delete" element={<Deletion />}/>
           </>
           {!authCtx.token || authCtx.refToken ? (
             <>
@@ -33,13 +36,15 @@ function App() {
           ) : (
             <>
               <Route path="/*" element={<Profile />} />
+              {/* <Route path="/delete" element={<Deletion />}/> */}
             </>
           )}
         </Routes>
         <Footer />
-      </BrowserRouter>
+      </BrowserRouter> 
     </>
   );
+  
 }
 
 export default App;
