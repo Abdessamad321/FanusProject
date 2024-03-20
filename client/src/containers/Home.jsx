@@ -3,12 +3,12 @@ import data from "../constants/bannerData";
 import test from "../assets/test.png"
 import axios from "axios";
 import { format } from 'date-fns';
+import EventGrid from "@/components/EventGrid";
 import NavBar from "../components/NavBar";
-import { BsStarFill } from "react-icons/bs";
+import { BsStarFill, BsCashCoin } from "react-icons/bs";
 import { TbPointFilled } from "react-icons/tb";
 import { FaRegHeart, FaTasks } from "react-icons/fa";
 import { LuClock4 } from "react-icons/lu";
-import { MdAttachMoney } from "react-icons/md";
 import { ImTicket } from "react-icons/im";
 import { IoNotifications, IoLocationOutline, IoCalendarNumberOutline, IoPersonSharp} from "react-icons/io5";
 ;
@@ -186,48 +186,7 @@ fetchEvent();
         <h1 className="text-[#6c6969] text-lg font-medium text-center "> A Tapestry of Unforgettable Moments</h1>
         <div className="my-8 grid grid-cols-1 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
         {events.map(event => (
-        <div className="2xl:p-3 p-5">
-            {/* img */}
-            <div className=" relative">
-                <img src={test} alt="/" className="2xl:h-72 h-80 w-full rounded-lg"/>
-                <FaRegHeart className="absolute text-white top-3 right-3 cursor-pointer" />
-            </div>
-           <div className="p-2 ">
-            {/* title */}
-           <div className="flex justify-between ">
-                <p className="font-bold text-[#161C2D]">{event.name}</p>
-                <div className="flex justify-center items-center">
-                <p className="px-2 font-semibold text-[#161C2D]">4.95</p>
-                <BsStarFill />
-                </div>
-            </div>
-            {/* location */}
-            <div className="flex items-center">
-            <IoLocationOutline />
-            <p className="px-2 text-[#161C2D]">{event.location}</p> 
-            </div>
-            {/* date */}
-            <div className="flex items-center">
-            <IoCalendarNumberOutline />
-            <p className="px-2 text-[#161C2D]">{format(new Date(event.date), 'dd/MM/yyyy')}</p> 
-            </div>
-            {/* time */}
-            <div className="flex items-center">
-            <LuClock4 />
-            <p className="px-2 text-[#161C2D]">{event.time.slice(0, -3)}</p> 
-            </div>
-            {/* but & pr */}
-            <div className="flex justify-between">
-            {/* price */}
-            <div className="flex items-center">
-            <MdAttachMoney />
-            <p className="px-2 font-semibold text-[#161C2D]">{event.price} Mad</p> 
-            </div>
-            {/* button */}
-            <button className="bg-[#6F584C] font-bold rounded-lg w-28 h-8 text-[#F5EFEC] hover:border-2 hover:border-[#6F584C] hover:bg-[#F5EFEC] hover:text-[#6F584C] ">Add to cart</button>
-            </div>
-           </div>
-        </div>
+        <EventGrid key={event.id} event={event} />
         ))}
         </div>
        
