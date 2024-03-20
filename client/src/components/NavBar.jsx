@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 import EventGrid from "./EventGrid";
+
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineNotificationsNone } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa6";
@@ -103,7 +104,7 @@ export default function NavBar() {
         </div>
       </div>
       {/* search bar */}
-      <div className="flex justify-center">
+      <div className="flex justify-center z-0">
         <div
           ref={searchRef}
           className={`relative border-solid border-2 rounded-full w-[45rem] h-16 flex items-center ${selected && 'bg-[#ebebeb]'}`}
@@ -121,7 +122,7 @@ export default function NavBar() {
               <p className="text-xs font-semibold text-[#161C2D]">Location</p>
               <p className="text-xs font-medium text-[#858585]">{location? location : "Where are you going ?"}</p>
               {selected === 'location' && <div className="absolute bottom-0 translate-y-full">
-                <input type="text" placeholder="Your Destination" className="px-4 py-2 rounded outline-stone-500 bg-stone-800 text-white placeholder:text-stone-100/70" 
+                <Dropdown className="px-4 py-2 rounded outline-stone-500 bg-stone-800 text-white placeholder:text-stone-100/70" 
                   onBlur={(e) => {
                   setLocation(e.target.value);
                 }}
