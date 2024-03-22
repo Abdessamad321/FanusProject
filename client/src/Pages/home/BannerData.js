@@ -1,4 +1,4 @@
-import test from '../assets/test.png';
+import test from '../../assets/test.png';
 const data =[
     {
         id:1,

@@ -1,6 +1,6 @@
 import React from "react";
 import { format } from 'date-fns';
-import test from "../assets/test.png";
+import test from '../../assets/test.png'
 import { BsStarFill, BsCashCoin } from "react-icons/bs";
 import { FaRegHeart } from "react-icons/fa";
 import { LuClock4 } from "react-icons/lu";

@@ -1,23 +1,31 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import EventGrid from "./EventGrid";
-
+import { Link, useNavigate } from "react-router-dom";
+import EventGrid from "../EventGrid/EventGrid";
+import Settings from '../settings/settings';
+import { useAuth } from "../LoginContext/LoginContext";
+import { Calendar } from "../../components/ui/calendar";
+import logo from '../../assets/logo.png'
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineNotificationsNone } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
-import { Calendar } from "../components/ui/calendar";
 
 
 
 export default function NavBar() {
+  
+  const navigate = useNavigate();
+  const { isLoggedIn, logout } = useAuth();
+  const [showSettings, setShowSettings] = useState(false);
   const [selected, setSelected] = useState(null);
   const searchRef = useRef(null);
-  const [date, setDate] = useState()
-  const [location, setLocation] = useState('')
-  const [data,setData ] = useState([])
+  const [date, setDate] = useState();
+  const [location, setLocation] = useState('');
+  const [data,setData ] = useState([]);
   const [events, setEvents] = useState([]);
-  const [isLoading, setIsLoading] = useState()
+  const [isLoading, setIsLoading] = useState();
+
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
       setSelected(null);
@@ -64,8 +72,7 @@ export default function NavBar() {
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
-    setIsLoading(true); // Set loading state before fetching data
-  
+    setIsLoading(true); 
     try {
       if (date.from && date.to) {
         const events = await searchEventsBetweenDates(date.from, date.to);
@@ -76,7 +83,7 @@ export default function NavBar() {
     } catch (error) {
       console.error("Error:", error.message);
     } finally {
-      setIsLoading(false); // Set loading state after data fetching is complete (or if there's an error)
+      setIsLoading(false);
     }
   };
    
@@ -88,30 +95,48 @@ export default function NavBar() {
     }
     , [date]);
 
+    const handleProfileClick  = () => {
+      if(!isLoggedIn){
+        navigate("/login")
+      } else{
+        setShowSettings(true);
+      }
+    }
+
   return (
     <>
-      {/* first part */}
-      <div className="flex items-center justify-between w-full h-20 px-8">
+    <div className=" z-[999]">
+        {/* first part */}
+        <div className="flex items-center justify-between w-full h-20 px-8">
         {/* logo */}
         <div className="w-1/4 flex justify-start">
-          <h1 className="text-[#C6553B] text-4xl"> Logo </h1>
+        <Link to="/">
+            <img src={logo} alt="" className=" "/>
+            {/* <h1 className="text-[#C6553B] text-4xl"> Logo </h1> */}
+          </Link>
         </div>
         {/* user options */}
         <div className="w-1/4 flex justify-end">
           <MdOutlineNotificationsNone className=" mx-4 w-8 h-8 p-1 border-[0.5px] rounded-full cursor-pointer" />
           <FaRegHeart className="mx-2 w-8 h-8 p-1 border-[0.5px] rounded-full cursor-pointer" />
-          <CgProfile className="mx-4 w-8 h-8 p-1 border-[0.5px] rounded-full cursor-pointer" />
+
+          <div className="profile-icon" onClick={handleProfileClick} >
+            {" "}
+            {/* */}
+            <CgProfile className="mx-4 w-8 h-8 p-1 border-[0.5px] rounded-full cursor-pointer" />
+          </div>
+          {showSettings && <Settings onClose={() => setShowSettings(false)} />}
         </div>
       </div>
       {/* search bar */}
-      <div className="flex justify-center z-0">
+      <div className="flex justify-center">
         <div
           ref={searchRef}
           className={`relative border-solid border-2 rounded-full w-[45rem] h-16 flex items-center ${selected && 'bg-[#ebebeb]'}`}
         >
           <div className="w-full flex items-center h-full">
             {/* Location */}
-            <div
+            <div 
               onClick={() => {
                 setSelected('location');
               }}
@@ -122,7 +147,7 @@ export default function NavBar() {
               <p className="text-xs font-semibold text-[#161C2D]">Location</p>
               <p className="text-xs font-medium text-[#858585]">{location? location : "Where are you going ?"}</p>
               {selected === 'location' && <div className="absolute bottom-0 translate-y-full">
-                <Dropdown className="px-4 py-2 rounded outline-stone-500 bg-stone-800 text-white placeholder:text-stone-100/70" 
+                <input placeholder="Your destination" className="z-[999] px-4 py-2 rounded outline-stone-500 bg-stone-800 text-white placeholder:text-stone-100/70" 
                   onBlur={(e) => {
                   setLocation(e.target.value);
                 }}
@@ -186,7 +211,7 @@ export default function NavBar() {
                   return day.isBefore(new Date());
                 }}
                 numberOfMonths={2}
-                className="rounded-md border absolute bottom-0 translate-y-full translate-x-1/4"
+                className=" rounded-md border absolute bottom-0 translate-y-full translate-x-1/4"
                 /> : ''}
           </div>
         </div>
@@ -196,6 +221,8 @@ export default function NavBar() {
  {isLoading ? <h1> Loading </h1> : data.map((event) => {
       return <EventGrid key={event.id} event={event} />;
   })}</div>
+    </div>
+    
     </>
   );
 }

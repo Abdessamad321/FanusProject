@@ -1,16 +1,13 @@
 import React, {useState,useRef,useEffect} from "react";
-import data from "../constants/bannerData";
-import test from "../assets/test.png"
+import data from "./BannerData";
 import axios from "axios";
-import { format } from 'date-fns';
-import EventGrid from "@/components/EventGrid";
-import NavBar from "../components/NavBar";
-import { BsStarFill, BsCashCoin } from "react-icons/bs";
+import EventGrid from "../../components/EventGrid/EventGrid";
+import NavBar from "../../components/Navbar/NavBar";
+import { BsStarFill } from "react-icons/bs";
 import { TbPointFilled } from "react-icons/tb";
-import { FaRegHeart, FaTasks } from "react-icons/fa";
-import { LuClock4 } from "react-icons/lu";
+import { FaTasks } from "react-icons/fa";
 import { ImTicket } from "react-icons/im";
-import { IoNotifications, IoLocationOutline, IoCalendarNumberOutline, IoPersonSharp} from "react-icons/io5";
+import { IoNotifications, IoPersonSharp} from "react-icons/io5";
 ;
 
 export default function Home () {
