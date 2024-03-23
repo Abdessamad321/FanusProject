@@ -358,6 +358,27 @@ async function verifyResetToken(req, res) {
   }
 }
 
+async function forgetPassword (req,res){
+  try {
+    const customer = await Customer.findOne({email:req.body.email});
+    if (! customer){
+      return res.status(200).send({
+        message:
+          "Oops! It seems like there's no account associated with the provided email address. Please make sure it's spelled correctly or consider signing up to join our awesome community!",
+      });
+    }
+    const token = req.headers.authorization.split(" ")[1];
+    customer.passwordResetToken= token,
+    customer.passwordResetExpires = Date.now() + (60 * 1000 * 10);
+      await customer.save()
+      sendEmail.sendResetPasswordEmail(customer.name,email,token);
+      res.status(200).send({ message: "Password reset email sent! Please check your inbox!" });
+  } catch (error) {
+    console.error(error)
+    res.status(500).send({ message: "Something wrong! Please try again." });
+  }
+}
+
 // async function setNewPass (req, res) {
 //   const { token } = req.params;
 //   const { newPassword } = req.body;
@@ -408,6 +429,9 @@ async function verifyResetToken(req, res) {
 
 // };
 
+
+
+
 module.exports = {
   createCustomer: createCustomer,
   loginCustomer: loginCustomer,
@@ -422,5 +446,6 @@ module.exports = {
   profileCustomer: profileCustomer,
   refreshTokens: refreshTokens,
   verifyResetToken: verifyResetToken,
+  forgetPassword: forgetPassword
   // authPost:authPost
 };

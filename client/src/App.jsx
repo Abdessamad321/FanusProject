@@ -9,13 +9,16 @@ import RegisterPage from "./Pages/authentification/registerPage.jsx";
 import HomePage from "./Pages/home/homePage.jsx";
 import LoginPage from "./Pages/authentification/loginPage.jsx";
 import LandingPage from "./Pages/landingPage/landing.jsx";
+import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
+import ResetPasword from "./components/ForgotPassword/ResetPasword";
+
 function App() {
   const authCtx = useContext(Context);
 
   return (
     <>
     {/* <Navbar/> */}
-      <BrowserRouter>
+      {/* <BrowserRouter>
         <Navbar />
         <Routes>
         <>
@@ -35,7 +38,8 @@ function App() {
           )}
         </Routes>
         <Footer />
-      </BrowserRouter>
+      </BrowserRouter> */}
+      <ResetPasword />
     </>
   );
 }

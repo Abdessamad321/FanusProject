@@ -27,7 +27,7 @@ router.patch(
   upload.single("customer_photo"),
   customerControllers.updateIdCustomer
 ); 
-
+router
 // router.delete("/customer/delete", customerControllers.deleteCustomer);
 
 router.patch("/delete", customerControllers.deleteCustomer);
@@ -35,5 +35,7 @@ router.patch("/delete", customerControllers.deleteCustomer);
 router.post("/refresh/token", customerControllers.refreshTokens);
 
 // router.post("/authpost", customerControllers.authPost);
+
+router.post("/forgetPassword", customerControllers.forgetPassword)
 
 module.exports = router;
