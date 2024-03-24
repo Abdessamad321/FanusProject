@@ -294,25 +294,26 @@ async function updatePassCustomer(req, res) {
 async function deleteCustomer(req, res) {
   try {
     const customerId = req.params.id;
-    const { password } = req.body;
+    // const { password } = req.body;
     const customer = await Customer.findById(customerId);
 
     if (!customer) {
       return res.status(404).json({ error: "Customer not found" });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, customer.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: "Invalid password" });
-    }
+    // // const isPasswordValid = await bcrypt.compare(password, customer.password);
+    // // if (!isPasswordValid) {
+    // //   return res.status(401).json({ error: "Invalid password" });
+    // }
 
     // Mark the customer as deleted in the database
-    const updatedCustomer = await Customer.findByIdAndUpdate(
-      customerId,
-      { isDeleted: true },
-      { new: true }
-    );
-
+    const updatedCustomer = await Customer.findByIdAndDelete(customerId);
+    
+  // const updatedCustomer = await Customer.findByIdAndUpdate(
+    //   customerId,
+    //   { isDeleted: true },
+    //   { new: true }
+    // );
     if (updatedCustomer) {
       res.json({ message: `Customer with ID ${customerId} marked as deleted` });
     } else {

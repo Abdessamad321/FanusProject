@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import FanousButton from "../../Button/Button";
 import { TextInput } from "../../inputs/inputs";
-import { useNavigate } from "react-router-dom";
+import { useNavigate , Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { DeleteOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -114,7 +114,7 @@ function security() {
             </div>
             <div className="flex justify-center items-center gap-1 text-red-500">
               <DeleteOutlined className="flex" />
-              <span>Delete Account</span>
+              <Link to="/delete">Delete Account</Link>
             </div>
           </div>
           <ToastContainer />

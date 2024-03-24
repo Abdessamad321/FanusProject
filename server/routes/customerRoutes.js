@@ -24,7 +24,7 @@ router.put("/:id",upload.single("customer_photo"), customerControllers.updateCus
 
 // router.patch("/update/:id", upload.single("customer_photo"), customerControllers.updateIdCustomer); 
 // delete
-router.delete("/:id", customerControllers.deleteCustomer);
+router.delete("/deleteCustomer/:id", customerControllers.deleteCustomer);
 
 router.post("/verifyPassword/:id", customerControllers.verifyPassword);
 
