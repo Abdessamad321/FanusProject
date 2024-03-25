@@ -10,21 +10,20 @@ const {OAuth2Client} = require('google-auth-library');
 require("dotenv").config();
 const secretKey = process.env.TOKEN_KEY;
 const refreshKey = process.env.REFRESH_KEY;
+const crypto = require("crypto");
 
 async function createCustomer(req, res) {
   const { name, phone, email, password } = req.body;//nationality,
   const realName = xss(name);
   const realPhone = xss(phone);
   const realEmail = xss(email);
-  // const realNationality = xss(nationality);
-  const realPass = xss(password);
+  const realPass = xss(password); 
   const customer_photo = req.file ? req.file.path : null;
 
   const validationErrors = customerValidation.validateCustomer(
     realName,
     realPhone,
     realEmail,
-    // realNationality,
     realPass
   );
   if (validationErrors.length > 0) {
@@ -219,8 +218,8 @@ async function allCustomers(req, res) {
 
 async function updateCustomer(req, res) {
   const customerId = req.params.id;
-  const { name, phone, email, nationality } = req.body;
-  let updateData = { name, phone, email, nationality };
+  const { name, code, phone, email, gender, birthday, nationality } = req.body;
+  let updateData = { name, code, phone, email, gender, birthday, nationality };
     
   if (req.file) {
       updateData.customer_photo = req.file.path;
@@ -240,12 +239,9 @@ async function updateCustomer(req, res) {
   }
 }
 
-async function updateIdCustomer(req, res) {
+async function updatePassCustomer(req, res) {
   const customerId = req.params.id;
-  const { old_password, new_password, name, phone, email, nationality } =
-    req.body;
-
-  const customer_photo = req.file ? req.file.path : null;
+  const { old_password, new_password } = req.body;
 
   try {
     const customer = await Customer.findById(customerId);
@@ -257,21 +253,15 @@ async function updateIdCustomer(req, res) {
     }
 
     const hashedNewPassword = await bcrypt.hash(new_password, 10);
-    customer.customer_photo = customer_photo;
-    customer.name = name;
-    customer.phone = phone;
-    customer.email = email;
-    customer.nationality = nationality;
     customer.password = hashedNewPassword;
 
     await customer.save();
-    customer.valid_account = true;
-    res.json(customer);
-    console.log(customer);
+    res.status(200).json({ message: 'Password updated successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 }
+
 
 async function deleteCustomer(req, res) {
   const token = req.headers.authorization.split(" ")[1];
@@ -339,6 +329,30 @@ async function refreshTokens(req, res) {
   }
 }
 
+//reset pass ========================================
+// async function resetRquist(req, res) {
+//   const { email } = req.body;
+//   try {
+//     const customers = await Customer.findOne({ email: email });
+//     if (!customers) {
+//       return res.status(404).json({ message: "customer not found" });
+//     }
+//     const resetToken =
+//       Math.random().toString(36).substring(2, 15) +
+//       Math.random().toString(36).substring(2, 15);
+//     customers.resetToken = resetToken;
+//     customers.resetTokenExpiration = Date.now() + 300000;
+//     await customers.save();
+//     sendEmail.sendResetEmail(customers.email, resetToken);
+//     return res
+//       .status(200)
+//       .json({ message: "Password reset email sent successfully" });
+//   } catch (error) {
+//     console.error(error);
+//     return res.status(500).json({ message: "Internal server error" });
+//   }
+// }
+
 
 // Verify ttoken ================================
 async function verifyResetToken(req, res) {
@@ -358,6 +372,7 @@ async function verifyResetToken(req, res) {
   }
 }
 
+// Send email to reset password
 async function forgetPassword (req,res){
   try {
     const customer = await Customer.findOne({email:req.body.email});
@@ -367,11 +382,13 @@ async function forgetPassword (req,res){
           "Oops! It seems like there's no account associated with the provided email address. Please make sure it's spelled correctly or consider signing up to join our awesome community!",
       });
     }
-    const token = req.headers.authorization.split(" ")[1];
+    const token = crypto.randomBytes(32).toString("hex");
+      console.log(token)
+
     customer.passwordResetToken= token,
     customer.passwordResetExpires = Date.now() + (60 * 1000 * 10);
       await customer.save()
-      sendEmail.sendResetPasswordEmail(customer.name,email,token);
+      sendEmail.sendResetPasswordEmail(customer.passwordResetToken,customer.email, customer.name);
       res.status(200).send({ message: "Password reset email sent! Please check your inbox!" });
   } catch (error) {
     console.error(error)
@@ -379,9 +396,11 @@ async function forgetPassword (req,res){
   }
 }
 
+
+
 // async function setNewPass (req, res) {
-//   const { token } = req.params;
-//   const { newPassword } = req.body;
+// const { token } = req.params;
+// const { newPassword } = req.body;
 
 //   try {
 //       const customer = await Customer.findOne({
@@ -401,8 +420,7 @@ async function forgetPassword (req,res){
 //   } catch (error) {
 //       console.error(error);
 //       return res.status(500).json({ message: 'Internal server error' });
-//   }
-// };
+//   }}
 
 
 
@@ -441,11 +459,14 @@ module.exports = {
   getCustomerId: getCustomerId,
   allCustomers: allCustomers,
   updateCustomer: updateCustomer,
-  updateIdCustomer: updateIdCustomer,
+  updatePassCustomer: updatePassCustomer,
   deleteCustomer: deleteCustomer,
   profileCustomer: profileCustomer,
   refreshTokens: refreshTokens,
+  // resetRquist:resetRquist,
   verifyResetToken: verifyResetToken,
+  // changePass: changePass,
+  // setNewPass: setNewPass,
   forgetPassword: forgetPassword
   // authPost:authPost
 };

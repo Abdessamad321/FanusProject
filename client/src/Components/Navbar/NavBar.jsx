@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import EventGrid from "../EventGrid/EventGrid";
-import Settings from '../settings/settings';
 import { useAuth } from "../LoginContext/LoginContext";
 import { Calendar } from "../../components/ui/calendar";
+import EventGrid from "../EventGrid/EventGrid";
+import Settings from '../settings/settings';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import logo from '../../assets/logo.png'
 import { FaSearch } from "react-icons/fa";
 import { MdOutlineNotificationsNone } from "react-icons/md";
@@ -13,8 +15,9 @@ import { CgProfile } from "react-icons/cg";
 
 
 
+
 export default function NavBar() {
-  
+
   const navigate = useNavigate();
   const { isLoggedIn, logout } = useAuth();
   const [showSettings, setShowSettings] = useState(false);
@@ -26,6 +29,9 @@ export default function NavBar() {
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState();
 
+  const cities = ["Marrakech","Casablanca","Tanger","Agadir","Rabat"]
+
+  // Click outside of the SearchBar
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
       setSelected(null);
@@ -39,11 +45,13 @@ export default function NavBar() {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
+  
 
-//Filter by date
-  const searchEventsBetweenDates =async (fromDateObj,toDateObj)=>{
+  // Search events
+  const searchEventsBetweenDates = async (fromDateObj, toDateObj) => {
     let events = [];
-    let currentDate = new Date(fromDateObj); 
+    if(fromDateObj){
+    let currentDate = new Date(fromDateObj);
     while (currentDate <= toDateObj) {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth() + 1;
@@ -51,32 +59,63 @@ export default function NavBar() {
       const newDateString = `${year}-${month < 10 ? '0' : ''}${month}-${day < 10 ? '0' : ''}${day}T00:00:00.000+00:00`;
   
       try {
-          const res = await axios.get('http://localhost:7000/event/all', { params: { location, date: newDateString } });
-          if(res.data?.message){
-            console.log(res.data?.message+'for '+currentDate)
-          }else{
-            console.log('event found for '+currentDate)
-            events.push(...res.data); 
-            setEvents(events);
-          }
+        let params = { date: newDateString };
+        if (location) {
+          params.location = location;
+        }
+        
+        const res = await axios.get('http://localhost:7000/event/all', { params });
+        
+        if (res.data?.message) {
+          console.log(res.data?.message + ' for ' + currentDate);
+        } else {
+          events.push(...res.data); 
+          setEvents(events);
+        }
+        
       } catch (error) {
-          console.error(`Error fetching events for ${newDateString}:`, error.message);
+        console.error(`Error fetching events for ${newDateString}:`, error.message);
       }
   
       currentDate.setDate(currentDate.getDate() + 1); 
-
     }
-
-    return events;
+  }else{
+    try {
+      let params = { location: location };
+      
+      
+      const res = await axios.get('http://localhost:7000/event/all', { params });
+      
+      if (res.data?.message) {
+        console.log(res.data?.message + ' for ' + params);
+      } else {
+        events.push(...res.data); 
+        setEvents(events);
+      }
+      
+    } catch (error) {
+      console.error(`Error fetching events for ${location}:`, error.message);
+    }
   }
+    if (events.length === 0) {
+      toast.error("No event found");
+    }
+  
+    return events;
+  };
 
   const handleSubmit = async (e) => {
     e?.preventDefault();
-    setIsLoading(true); 
+  
     try {
-      if (date.from && date.to) {
+      if (date?.from && date?.to) {
         const events = await searchEventsBetweenDates(date.from, date.to);
         console.log("Events between", date.from, "and", date.to + ":");
+        console.log(events);
+        setData(events);
+      }else{
+        const events = await searchEventsBetweenDates();
+        console.log("Events in"+ location);
         console.log(events);
         setData(events);
       }
@@ -87,7 +126,6 @@ export default function NavBar() {
     }
   };
    
-
   useEffect(
     () => {
  
@@ -95,6 +133,7 @@ export default function NavBar() {
     }
     , [date]);
 
+    //Profile settings
     const handleProfileClick  = () => {
       if(!isLoggedIn){
         navigate("/login")
@@ -105,7 +144,7 @@ export default function NavBar() {
 
   return (
     <>
-    <div className=" z-[999]">
+    <div>
         {/* first part */}
         <div className="flex items-center justify-between w-full h-20 px-8">
         {/* logo */}
@@ -135,6 +174,7 @@ export default function NavBar() {
           className={`relative border-solid border-2 rounded-full w-[45rem] h-16 flex items-center ${selected && 'bg-[#ebebeb]'}`}
         >
           <div className="w-full flex items-center h-full">
+
             {/* Location */}
             <div 
               onClick={() => {
@@ -146,15 +186,34 @@ export default function NavBar() {
             >
               <p className="text-xs font-semibold text-[#161C2D]">Location</p>
               <p className="text-xs font-medium text-[#858585]">{location? location : "Where are you going ?"}</p>
-              {selected === 'location' && <div className="absolute bottom-0 translate-y-full">
-                <input placeholder="Your destination" className="z-[999] px-4 py-2 rounded outline-stone-500 bg-stone-800 text-white placeholder:text-stone-100/70" 
-                  onBlur={(e) => {
-                  setLocation(e.target.value);
-                }}
-                />
+              {selected === 'location' && <div className="absolute bottom-0 translate-y-full -translate-x-6 w-1/3 z-10">
+              <div className="absolute z-10 w-full mt-2 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+              {cities.map((city, index) => (
+                <a
+                key={index}
+                href="#"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                role="menuitem"
+                tabIndex="-1"
+                selected={location}
+                onSelect={(e)=>{
+                  setLocation(e)
+                  setSelected(false);
+                  }}
+                  onClick={(e)=>
+                    {
+                    e?.stopPropagation();
+                    setSelected('arrival')
+                    setLocation(city)
+                    }}
+                >
+                {city}</a>
+          ))}
+        </div>
               </div>}
             </div>
             {!selected && <div className="border-solid border-r-2 h-[65%]" />}
+            
             {/* arrival */}
             <div
               onClick={() => {
@@ -204,25 +263,22 @@ export default function NavBar() {
                 defaultMonth={date?.from}
                 selected={date}
                 onSelect={(e)=>{
-                  setSelected('departure');
-                  setDate(e)
-                }}
-                isDisabled={(day) => {
-                  return day.isBefore(new Date());
+                setSelected('departure');
+                setDate(e)
                 }}
                 numberOfMonths={2}
-                className=" rounded-md border absolute bottom-0 translate-y-full translate-x-1/4"
+                className=" z-10 rounded-md border absolute bottom-0 translate-y-full translate-x-1/4"
                 /> : ''}
           </div>
         </div>
       </div>
 
       <div className="my-8 grid grid-cols-1 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
- {isLoading ? <h1> Loading </h1> : data.map((event) => {
-      return <EventGrid key={event.id} event={event} />;
+ {isLoading ? "" : data.map((event, index) => {
+      return <EventGrid key={index} event={event} />;
   })}</div>
     </div>
-    
+    <ToastContainer />
     </>
   );
 }

@@ -75,7 +75,7 @@ fetchEvent();
 
     return (
         <>
-        <NavBar/>
+        <NavBar />
         {/* Carousel */}
         <div className=" flex flex-col border-b-2 py-8 px-3">
           <div

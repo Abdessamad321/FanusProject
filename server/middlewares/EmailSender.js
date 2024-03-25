@@ -39,7 +39,7 @@ function sendWelcomeEmail(id, email, password) {
     });
   }
 
-function sendResetPasswordEmail(token, email,name){
+function sendResetPasswordEmail(token, email, name){
   const transporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {

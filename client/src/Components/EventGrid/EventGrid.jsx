@@ -5,6 +5,7 @@ import { BsStarFill, BsCashCoin } from "react-icons/bs";
 import { FaRegHeart } from "react-icons/fa";
 import { LuClock4 } from "react-icons/lu";
 import { IoLocationOutline, IoCalendarNumberOutline} from "react-icons/io5";
+import FanousButton from "../Button/Button";
 
 
 

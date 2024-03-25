@@ -18,8 +18,7 @@ function App() {
   return (
     <>
     {/* <Navbar/> */}
-      {/* <BrowserRouter>
-        <Navbar />
+      <BrowserRouter>
         <Routes>
         <>
           <Route path="/login" element={<LoginPage />} />
@@ -38,8 +37,8 @@ function App() {
           )}
         </Routes>
         <Footer />
-      </BrowserRouter> */}
-      <ResetPasword />
+      </BrowserRouter> 
+      {/* <ResetPasword /> */}
     </>
   );
 }
