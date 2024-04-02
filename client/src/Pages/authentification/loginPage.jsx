@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { BsFacebook } from "react-icons/bs";
+import FanousButton from "../../Components/Button/Button";
 import { IoLogoGoogle, IoLogoApple } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom"; 
 import { toast, ToastContainer } from "react-toastify";
@@ -187,12 +188,12 @@ function Login() {
               </div>
             </div>
             <div className="flex items-center mb-2 justify-center">
-              <button
-                className="bg-[#6F584C] text-white font-bold py-1 px-8 rounded-full focus:outline-none focus:shadow-outline"
+              <FanousButton
+                className="py-1 px-8 rounded-full focus:outline-none focus:shadow-outline"
                 type="submit"
               >
                 Login
-              </button>
+              </FanousButton>
             </div>
             <h2 className="text-center mb-2">Or continue with</h2>
             <div className="flex flex-row items-center gap-6 justify-center">

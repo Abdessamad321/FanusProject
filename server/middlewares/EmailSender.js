@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+const nodemailer = require("nodemailer")
 
 require("dotenv").config();
 const passwordKey = process.env.PASS_KEY;
@@ -39,9 +39,37 @@ function sendWelcomeEmail(id, email, password) {
     });
   }
 
-
+  function deletionEmail(deletionReason, improveService) {
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "fanousprod@gmail.com",
+        pass: passwordKey, 
+      },
+    });
+  
+    const mailOptions = {
+      from: email,
+      to: "fanousprod@gmail.com",
+      subject: "New Contact Form Submission",
+      text: `Deletion Reason: ${deletionReason}\nImprove Service: ${improveService}`,
+    };
+  
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+      } else {
+        console.log("Email sent: " + info.response);
+        res.status(200).send("Email sent successfully");
+      }
+    });
+  }
+  
 
 
   module.exports = {
     sendWelcomeEmail: sendWelcomeEmail,
+  deletionEmail: deletionEmail,
+
  }
