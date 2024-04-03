@@ -329,99 +329,57 @@ async function refreshTokens(req, res) {
   }
 }
 
-//reset pass ========================================
-// async function resetRquist(req, res) {
-//   const { email } = req.body;
-//   try {
-//     const customers = await Customer.findOne({ email: email });
-//     if (!customers) {
-//       return res.status(404).json({ message: "customer not found" });
-//     }
-//     const resetToken =
-//       Math.random().toString(36).substring(2, 15) +
-//       Math.random().toString(36).substring(2, 15);
-//     customers.resetToken = resetToken;
-//     customers.resetTokenExpiration = Date.now() + 300000;
-//     await customers.save();
-//     sendEmail.sendResetEmail(customers.email, resetToken);
-//     return res
-//       .status(200)
-//       .json({ message: "Password reset email sent successfully" });
-//   } catch (error) {
-//     console.error(error);
-//     return res.status(500).json({ message: "Internal server error" });
-//   }
-// }
-
-
-// Verify ttoken ================================
-async function verifyResetToken(req, res) {
-  const { token } = req.params;
-  try {
-    const customers = await Customer.findOne({
-      resetToken: token,
-      resetTokenExpiration: { $gt: Date.now() },
-    });
-    if (!customers) {
-      return res.status(400).json({ message: "Invalid or expired token" });
-    }
-    return res.status(200).json({ message: "Token is valid" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
-}
-
 // Send email to reset password
 async function forgetPassword (req,res){
   try {
     const customer = await Customer.findOne({email:req.body.email});
     if (! customer){
       return res.status(200).send({
+        status: 'error',
         message:
-          "Oops! It seems like there's no account associated with the provided email address. Please make sure it's spelled correctly or consider signing up to join our awesome community!",
+          "Oops! There's no account associated with the provided email address",
       });
     }
     const token = crypto.randomBytes(32).toString("hex");
       console.log(token)
 
-    customer.passwordResetToken= token,
-    customer.passwordResetExpires = Date.now() + (60 * 1000 * 10);
+    customer.resetToken= token;
+    customer.resetTokenExpiration= Date.now() + (60 * 1000 );
       await customer.save()
-      sendEmail.sendResetPasswordEmail(customer.passwordResetToken,customer.email, customer.name);
-      res.status(200).send({ message: "Password reset email sent! Please check your inbox!" });
+      
+      sendEmail.sendResetPasswordEmail(customer.resetToken,customer.email, customer.name);
+      res.status(200).send({ status: 'success',message: "Password reset email sent!" });
   } catch (error) {
     console.error(error)
     res.status(500).send({ message: "Something wrong! Please try again." });
   }
 }
 
+//Reset password
+async function resetPassword (req,res){
+  const { token } = req.params;
+  const {newPassword,confirmNewPassword} = req.body;
+  const customer = await Customer.findOne({resetToken:token})
+  
+  if (!customer){
+    res.status(200).send({status:"error",message:'Invalid token'})
+   return 
+ }if(customer.resetTokenExpiration - Date.now() < 0 ) {
+    res.status(200).send({status:"error",message:"token has expired"})
+    return 
+ }if(newPassword != confirmNewPassword){
+  res.status(200).send({status:"error",message : 'Password must match confirm Password' })
+  return 
+ }
 
-
-// async function setNewPass (req, res) {
-// const { token } = req.params;
-// const { newPassword } = req.body;
-
-//   try {
-//       const customer = await Customer.findOne({
-//       resetToken: token,
-//       resetTokenExpiration: { $gt: Date.now() },
-//       });
-//       if (!customer) {
-//           return res.status(400).json({ message: 'Invalid or expired token' });
-//       }
-//       const hashedPass = await bcrypt.hash(newPassword, 10);
-//       customer.password = hashedPass;
-//       customer.resetToken = null;
-//       customer.resetTokenExpiration = null;
-//       await customer.save();
-
-//       return res.status(200).json({ message: 'Password updated successfully' });
-//   } catch (error) {
-//       console.error(error);
-//       return res.status(500).json({ message: 'Internal server error' });
-//   }}
-
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+  customer.password = hashedPassword;
+  customer.resetToken = null;
+  customer.resetTokenExpiration = null;
+  await customer.save();
+  res.status(200).json({status:"success", message:"the new password has been set succesfully " });
+}
 
 
 // async function authPost(req, res, next) {
@@ -464,9 +422,7 @@ module.exports = {
   profileCustomer: profileCustomer,
   refreshTokens: refreshTokens,
   // resetRquist:resetRquist,
-  verifyResetToken: verifyResetToken,
-  // changePass: changePass,
-  // setNewPass: setNewPass,
-  forgetPassword: forgetPassword
+  forgetPassword: forgetPassword,
+  resetPassword:resetPassword
   // authPost:authPost
 };

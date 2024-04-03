@@ -12,6 +12,8 @@ import { FaSearch } from "react-icons/fa";
 import { MdOutlineNotificationsNone } from "react-icons/md";
 import { FaRegHeart } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
+import { useSetAtom } from 'jotai'
+import { isDataAvailable } from "@/lib/states";
 
 
 
@@ -28,7 +30,7 @@ export default function NavBar() {
   const [data,setData ] = useState([]);
   const [events, setEvents] = useState([]);
   const [isLoading, setIsLoading] = useState();
-
+  const setShowData = useSetAtom(isDataAvailable)
   const cities = ["Marrakech","Casablanca","Tanger","Agadir","Rabat"]
 
   // Click outside of the SearchBar
@@ -99,23 +101,27 @@ export default function NavBar() {
   }
     if (events.length === 0) {
       toast.error("No event found");
+      setShowData(false)
+      return events
     }
-  
+
+    setShowData(true)
     return events;
   };
 
+
   const handleSubmit = async (e) => {
     e?.preventDefault();
-  
     try {
+      let events = [];
       if (date?.from && date?.to) {
-        const events = await searchEventsBetweenDates(date.from, date.to);
+        events = await searchEventsBetweenDates(date.from, date.to);
         console.log("Events between", date.from, "and", date.to + ":");
         console.log(events);
         setData(events);
-      }else{
-        const events = await searchEventsBetweenDates();
-        console.log("Events in"+ location);
+      } else {
+        events = await searchEventsBetweenDates();
+        console.log("Events in" + location);
         console.log(events);
         setData(events);
       }
@@ -125,6 +131,7 @@ export default function NavBar() {
       setIsLoading(false);
     }
   };
+  
    
   useEffect(
     () => {
@@ -137,6 +144,7 @@ export default function NavBar() {
     const handleProfileClick  = () => {
       if(!isLoggedIn){
         navigate("/login")
+        refresh()
       } else{
         setShowSettings(true);
       }
@@ -151,7 +159,6 @@ export default function NavBar() {
         <div className="w-1/4 flex justify-start">
         <Link to="/">
             <img src={logo} alt="" className=" "/>
-            {/* <h1 className="text-[#C6553B] text-4xl"> Logo </h1> */}
           </Link>
         </div>
         {/* user options */}
@@ -240,22 +247,7 @@ export default function NavBar() {
               <p className="text-xs font-medium text-[#858585]">{date?.to?.toDateString() || "Add dates"}</p>
             </div>
             {!selected && <div className="border-solid border-r-2 h-[65%]" />}
-            {/* search */}
-            
-            <div
-              onClick={() => {
-                setSelected('search');
-                handleSubmit()
-              }}
-              id="search-filter-div"
-              className="w-1/6 flex items-center px-2"
-            >
-              <button className=" flex text-sm items-center text-[#F5EFEC]  rounded-full  p-2 bg-[#6F584C] border-0
-              ">
-                {/* <span className={`${selected === null ? 'hidden' : 'block'} font-bold`}>Search</span> */}
-                <FaSearch className="w-8 h-8 p-2 text-[#F5EFEC] " />
-              </button>
-            </div>
+            {/* Calendar */}
             {(selected == 'arrival' | selected == 'departure') ?
                 <Calendar
                 initialFocus
@@ -269,14 +261,29 @@ export default function NavBar() {
                 numberOfMonths={2}
                 className=" z-10 rounded-md border absolute bottom-0 translate-y-full translate-x-1/4"
                 /> : ''}
+            {/* search */}
+            <div
+              onClick={() => {
+                setSelected('search');
+                handleSubmit()
+              }}
+              id="search-filter-div"
+              className="w-1/6 flex items-center px-2"
+            >
+              <button className=" flex text-sm items-center text-[#F5EFEC]  rounded-full  p-2 bg-[#6F584C] border-0
+              ">
+                {/* <span className={`${selected === null ? 'hidden' : 'block'} font-bold`}>Search</span> */}
+                <FaSearch className="w-8 h-8 p-2 text-[#F5EFEC] " />
+              </button>
+            </div> 
           </div>
         </div>
       </div>
-
+      {/* Display Events */}
       <div className="my-8 grid grid-cols-1 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
  {isLoading ? "" : data.map((event, index) => {
-      return <EventGrid key={index} event={event} />;
-  })}</div>
+      return <EventGrid key={index} event={event} />})}
+  </div>
     </div>
     <ToastContainer />
     </>

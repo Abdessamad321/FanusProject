@@ -8,12 +8,14 @@ import { TbPointFilled } from "react-icons/tb";
 import { FaTasks } from "react-icons/fa";
 import { ImTicket } from "react-icons/im";
 import { IoNotifications, IoPersonSharp} from "react-icons/io5";
-;
+import { useAtomValue, useSetAtom } from 'jotai'
+import { isDataAvailable } from "@/lib/states";
 
 export default function Home () {
     // Carousel logic
-    const VALUE_TO_SLIDE = 400
-const [scrollValue, setScrollValue]=useState(0)
+  const VALUE_TO_SLIDE = 400
+  const [scrollValue, setScrollValue]=useState(0)
+  
   const slideLeft = (n) => {
     const slider = document.getElementById('slider');
     if (typeof n === 'number')
@@ -56,7 +58,11 @@ const [scrollValue, setScrollValue]=useState(0)
 
 //   Events data
 const [events, setEvents] = useState([]);
+const showData = useAtomValue(isDataAvailable)
+const setShowData = useSetAtom(isDataAvailable)
+
 useEffect(() => {
+  setShowData(false);
 const fetchEvent = async () =>{
     try {
         const response = await axios.get("http://localhost:7000/event/all");
@@ -73,10 +79,13 @@ fetchEvent();
 }, []);
 
 
+
+
     return (
         <>
         <NavBar />
-        {/* Carousel */}
+        { !showData && <div>
+          {/* Carousel */}
         <div className=" flex flex-col border-b-2 py-8 px-3">
           <div
             id="slider"
@@ -228,6 +237,6 @@ fetchEvent();
             </div>
         </div>
         </div>
-        </>
-    )
+      </div> } </>
+        )
 }

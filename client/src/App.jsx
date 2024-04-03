@@ -9,8 +9,9 @@ import RegisterPage from "./Pages/authentification/registerPage.jsx";
 import HomePage from "./Pages/home/homePage.jsx";
 import LoginPage from "./Pages/authentification/loginPage.jsx";
 import LandingPage from "./Pages/landingPage/landing.jsx";
+import FilterResults from "./Pages/FilterResults/FilterResults";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
-import ResetPasword from "./components/ForgotPassword/ResetPasword";
+import ResetPassword from "./components/ForgotPassword/ResetPassword";
 
 function App() {
   const authCtx = useContext(Context);
@@ -25,6 +26,7 @@ function App() {
           <Route path="/create" element={<RegisterPage />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<HomePage />} />
+          <Route path= "/filterresults" element={<FilterResults />} />
           </>
           {!authCtx.token || authCtx.refToken ? (
             <>
@@ -35,6 +37,8 @@ function App() {
               <Route path="/*" element={<Profile />} />
             </>
           )}
+        <Route path="/forgetpassword" element={<ForgotPassword/>} />
+        <Route path="/resetpassword/:token" element={<ResetPassword />} />
         </Routes>
         <Footer />
       </BrowserRouter> 

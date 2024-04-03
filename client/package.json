@@ -17,6 +17,7 @@
     "clsx": "^2.1.0",
     "date-fns": "^3.5.0",
     "install": "^0.13.0",
+    "jotai": "^2.7.2",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.358.0",
     "npm": "^10.5.0",
@@ -26,7 +27,7 @@
     "react-icons": "^5.0.1",
     "react-multi-carousel": "^2.8.4",
     "react-phone-number-input": "^3.3.9",
-    "react-router-dom": "^6.22.0",
+    "react-router-dom": "^6.22.3",
     "react-select": "^5.8.0",
     "react-toastify": "^10.0.5",
     "tailwind-merge": "^2.2.2"

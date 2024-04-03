@@ -4,6 +4,7 @@ const customerControllers = require("../controllers/customerControllers");
 
 // const redirectToRole = require('../../middlewares/auth');
 const upload = require("../middlewares/Cloudinary");
+const { countDocuments } = require("../models/customer");
 
 router.post("/create",upload.single("customer_photo"), customerControllers.createCustomer);
 
@@ -41,6 +42,7 @@ router.post("/refresh/token", customerControllers.refreshTokens);
 
 // router.post("/authpost", customerControllers.authPost);
 
-router.post("/forgetPassword", customerControllers.forgetPassword)
+router.post("/forgetPassword", customerControllers.forgetPassword);
+router.post("/resetpassword/:token", customerControllers.resetPassword)
 
 module.exports = router;
