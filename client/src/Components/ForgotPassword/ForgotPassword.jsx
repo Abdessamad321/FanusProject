@@ -42,10 +42,10 @@ export default function ForgotPassword () {
           </div>
         </div>
         <div className="flex justify-center z-[100] items-center h-screen">
-        <form onSubmit={handleForgotPassword} className="bg-white w-[430px] shadow-md rounded-3xl px-10 py-28 m-1 ">
+        <form onSubmit={handleForgotPassword} className="bg-white w-[430px] shadow-md rounded-3xl px-10 py-28 2xl:px-6 2xl:py-14 m-1 ">
             <h2 className="mb-4 font-medium text-[#161C2D]">Forget Password</h2>
             <p className="text-[#757474]">Enter your registered email below</p>
-           <div className="py-16">
+           <div className="py-16 2xl:py-10">
             <p className="text-[#757474] pb-3 ml-4">Enter Email Address</p>
             <input 
             type="email" 

@@ -344,7 +344,7 @@ async function forgetPassword (req,res){
       console.log(token)
 
     customer.resetToken= token;
-    customer.resetTokenExpiration= Date.now() + (60 * 1000 );
+    customer.resetTokenExpiration= Date.now() + (60 * 1000  );
       await customer.save()
       
       sendEmail.sendResetPasswordEmail(customer.resetToken,customer.email, customer.name);

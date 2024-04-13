@@ -9,7 +9,6 @@ import RegisterPage from "./Pages/authentification/registerPage.jsx";
 import HomePage from "./Pages/home/homePage.jsx";
 import LoginPage from "./Pages/authentification/loginPage.jsx";
 import LandingPage from "./Pages/landingPage/landing.jsx";
-import FilterResults from "./Pages/FilterResults/FilterResults";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ResetPassword from "./components/ForgotPassword/ResetPassword";
 
@@ -26,7 +25,6 @@ function App() {
           <Route path="/create" element={<RegisterPage />} />
           <Route path="/" element={<LandingPage />} />
           <Route path="/home" element={<HomePage />} />
-          <Route path= "/filterresults" element={<FilterResults />} />
           </>
           {!authCtx.token || authCtx.refToken ? (
             <>
