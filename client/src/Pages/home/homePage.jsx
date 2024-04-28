@@ -10,6 +10,7 @@ import { BsStarFill } from "react-icons/bs";
 import { TbPointFilled } from "react-icons/tb";
 import { FaTasks } from "react-icons/fa";
 import { ImTicket } from "react-icons/im";
+import { FaRegHeart } from "react-icons/fa";
 
 import { useAtomValue, useSetAtom } from 'jotai'
 import { isDataAvailable } from "@/lib/states";
@@ -157,7 +158,7 @@ const fetchEvent = async () =>{
                 </div>
                 {/* time */}
                 <div className="flex items-center">
-                  <LuClock4 />
+                  {/* <LuClock4 /> */}
                   <p className="px-2 text-[#161C2D]">
                     {event.time.slice(0, -3)}
                   </p>
@@ -166,7 +167,7 @@ const fetchEvent = async () =>{
                 <div className="flex justify-between">
                   {/* price */}
                   <div className="flex items-center">
-                    <MdAttachMoney />
+                    {/* <MdAttachMoney /> */}
                     <p className="px-2 font-semibold text-[#161C2D]">
                       {event.price} MAD
                     </p>
