@@ -1,12 +1,14 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Context } from "../../Components/LoginContext/LoginContext";
+import { Context } from "../LoginContext/LoginContext";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import upload from "../../assets/account.png";
 import FanousButton from "../Button/Button";
 import { monthOptions, countries } from "./data";
-import "react-datepicker/dist/react-datepicker.css";
+// import "react-datepicker/dist/react-datepicker.css";
+import Select from "react-select";
+
 import { TextInput } from "../inputs/inputs";
 import { Dropdown } from "../../Components/dropdowns/dropdown";
 
@@ -253,8 +255,9 @@ function EditProfile() {
               value={customer.code}
               onChange={(e) => handleSelectChange("code", e.value)}
             />
+          
             <TextInput
-              className="border-l-0 rounded-r-md text-gray-800"
+              className="border-l-0 rounded-r-md text-gray-800 "
               type="phone"
               id="phoneNumber"
               name="phoneNumber"

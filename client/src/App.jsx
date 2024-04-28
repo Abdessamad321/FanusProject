@@ -1,25 +1,30 @@
 import React, { useState, useContext } from "react";
 import "./App.css";
-import Navbar from "./Components/Navbar/NavBar";
+import Navbar from "../src/Components/Navbar/NavBar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Profile from "./Pages/profile/profile.jsx";
-import Footer from "./Components/Footer/Footer";
-import { Context } from "./Components/LoginContext/LoginContext.jsx";
+import Footer from "../src/Components/Footer/Footer";
+import { Context } from "../src/Components/LoginContext/LoginContext";
 import RegisterPage from "./Pages/authentification/registerPage.jsx";
 import HomePage from "./Pages/home/homePage.jsx";
 import LoginPage from "./Pages/authentification/loginPage.jsx";
 import LandingPage from "./Pages/landingPage/landing.jsx";
+import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
+import ResetPassword from "./Components/ForgotPassword/ResetPassword";
+import Deletion from "./Components/menu/security/deletion.jsx";
 import ProductDetail from './Components/oussama/ProductDetail.jsx';
 
+
+import ProductDetails from './Pages/productDetails/productDetails.jsx'
 function App() {
   const authCtx = useContext(Context);
 
   return (
     <>
-    {/* <ProductDetail/> */}
+    
+    {/* <ProductDetails/> */}
       <BrowserRouter>
-        <Navbar />
-        <Routes>
+        <Navbar/><Routes>
         <>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/create" element={<RegisterPage />} />
@@ -33,13 +38,20 @@ function App() {
           ) : (
             <>
               <Route path="/*" element={<Profile />} />
+              <Route path="/delete" element={<Deletion />}/>
+              <Route path="/event-detail/:eventId" element={<ProductDetail/>}/>
             </>
           )}
+        <Route path="/forgetpassword" element={<ForgotPassword/>} />
+        <Route path="/resetpassword/:token" element={<ResetPassword />} />
         </Routes>
         <Footer />
-      </BrowserRouter>
+      </BrowserRouter> 
+      {/* <ResetPasword /> */}
+
     </>
   );
+  
 }
 
 export default App;

@@ -7,6 +7,9 @@ const eventSchema = new mongoose.Schema(
     //   type: mongoose.Schema.Types.ObjectId,
     //   ref: "User",
     // },
+    event_photo:{
+      type: String,
+    },
     name: {
       type: String,
       required: true,

@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import { AuthProvider } from "./Components/LoginContext/LoginContext.jsx";
+import { AuthProvider } from "../src/Components/LoginContext/LoginContext.jsx";
 
 // import { GoogleOAuthProvider } from '@react-oauth/google';
 
