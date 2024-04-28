@@ -10,6 +10,7 @@ const { OAuth2Client } = require("google-auth-library");
 require("dotenv").config();
 const secretKey = process.env.TOKEN_KEY;
 const refreshKey = process.env.REFRESH_KEY;
+const crypto = require("crypto");
 
 async function createCustomer(req, res) {
   const { name, phone, email, password } = req.body; //nationality,
@@ -523,47 +524,62 @@ async function refreshTokens(req, res) {
   }
 }
 
-//reset pass ========================================
-async function resetRquist(req, res) {
-  const { email } = req.body;
+// Send email to reset password
+async function forgetPassword (req,res){
   try {
-    const customers = await Customer.findOne({ email: email });
-    if (!customers) {
-      return res.status(404).json({ message: "customer not found" });
+    const customer = await Customer.findOne({email:req.body.email});
+    if (! customer){
+      return res.status(200).send({
+        status: 'error',
+        message:
+          "Oops! There's no account associated with the provided email address",
+      });
     }
-    const resetToken =
-      Math.random().toString(36).substring(2, 15) +
-      Math.random().toString(36).substring(2, 15);
-    customers.resetToken = resetToken;
-    customers.resetTokenExpiration = Date.now() + 300000;
-    await customers.save();
-    sendEmail.sendResetEmail(customers.email, resetToken);
-    return res
-      .status(200)
-      .json({ message: "Password reset email sent successfully" });
+    const token = crypto.randomBytes(32).toString("hex");
+      console.log(token)
+
+    customer.resetToken= token;
+    customer.resetTokenExpiration= Date.now() + (60 * 1000  );
+      await customer.save()
+      
+      sendEmail.sendResetPasswordEmail(customer.resetToken,customer.email, customer.name);
+      res.status(200).send({ status: 'success',message: "Password reset email sent!" });
   } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
+    console.error(error)
+    res.status(500).send({ message: "Something wrong! Please try again." });
   }
 }
 
+
+async function resetPassword (req,res){
+
 // Verify ttoken ================================
-async function verifyResetToken(req, res) {
+// async function verifyResetToken(req, res) {
+
   const { token } = req.params;
-  try {
-    const customers = await Customer.findOne({
-      resetToken: token,
-      resetTokenExpiration: { $gt: Date.now() },
-    });
-    if (!customers) {
-      return res.status(400).json({ message: "Invalid or expired token" });
-    }
-    return res.status(200).json({ message: "Token is valid" });
-  } catch (error) {
-    console.error(error);
-    return res.status(500).json({ message: "Internal server error" });
-  }
+  const {newPassword,confirmNewPassword} = req.body;
+  const customer = await Customer.findOne({resetToken:token})
+  
+  if (!customer){
+    res.status(200).send({status:"error",message:'Invalid token'})
+   return 
+ }if(customer.resetTokenExpiration - Date.now() < 0 ) {
+    res.status(200).send({status:"error",message:"token has expired"})
+    return 
+ }if(newPassword != confirmNewPassword){
+  res.status(200).send({status:"error",message : 'Password must match confirm Password' })
+  return 
+ }
+
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(newPassword, salt);
+  customer.password = hashedPassword;
+  customer.resetToken = null;
+  customer.resetTokenExpiration = null;
+  await customer.save();
+  res.status(200).json({status:"success", message:"the new password has been set succesfully " });
 }
+
 
 async function setNewPass(req, res) {
   const { token } = req.params;
@@ -613,6 +629,9 @@ async function setNewPass(req, res) {
 
 // };
 
+
+
+
 module.exports = {
   createCustomer: createCustomer,
   loginCustomer: loginCustomer,
@@ -628,8 +647,13 @@ module.exports = {
   // verifyPassword: verifyPassword,
   profileCustomer: profileCustomer,
   refreshTokens: refreshTokens,
+
+  // resetRquist:resetRquist,
+  forgetPassword: forgetPassword,
+  resetPassword:resetPassword
+
   resetRquist: resetRquist,
-  verifyResetToken: verifyResetToken,
+//   verifyResetToken: verifyResetToken,
   // changePass: changePass,
   setNewPass: setNewPass,
   // authPost:authPost

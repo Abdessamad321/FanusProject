@@ -12,7 +12,7 @@ import {
   EyeInvisibleFilled,
   CloseOutlined,
 } from "@ant-design/icons";
-import { Context } from "../../Components/LoginContext/LoginContext";
+import { Context } from "../../components/LoginContext/LoginContext";
 
 function Login() {
   const [isLogin, setIsLogin] = useState(true);
@@ -162,7 +162,7 @@ function Login() {
               >
                 Password
               </label>
-              <div className="mb-2 relative">
+              <div className="mb-1 relative">
                 <input
                   className="shadow appearance-none border border-[#6F584C] rounded-full w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                   id="password"
@@ -185,6 +185,11 @@ function Login() {
                     />
                   )}
                 </div>
+              </div>
+              <div>
+                <Link to='/forgetpassword'>
+                  <p className="text-sm cursor-pointer drop-shadow-lg text-[#161C2D] hover:underline">Forget Password?</p>
+                </Link>
               </div>
             </div>
             <div className="flex items-center mb-2 justify-center">

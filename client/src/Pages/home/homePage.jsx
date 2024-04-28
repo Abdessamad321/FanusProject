@@ -1,14 +1,19 @@
 import React, { useState, useRef, useEffect } from "react";
 import data from "./BannerData";
+
+import EventGrid from "../../components/EventGrid/EventGrid";
+import NavBar from "../../components/Navbar/NavBar";
 import test from "../../assets/test.png";
 import axios from "axios";
 import { format } from "date-fns";
 import { BsStarFill } from "react-icons/bs";
 import { TbPointFilled } from "react-icons/tb";
-import { FaRegHeart, FaTasks } from "react-icons/fa";
-import { LuClock4 } from "react-icons/lu";
-import { MdAttachMoney } from "react-icons/md";
+import { FaTasks } from "react-icons/fa";
 import { ImTicket } from "react-icons/im";
+
+import { useAtomValue, useSetAtom } from 'jotai'
+import { isDataAvailable } from "@/lib/states";
+
 import {
   IoNotifications,
   IoLocationOutline,
@@ -59,12 +64,15 @@ export default function Home() {
     sliderRef.current.scrollLeft = startScrollLeft - walk;
   };
 
-  //   Events data
-  const [events, setEvents] = useState([]);
+//   Events data
+const [events, setEvents] = useState([]);
+const showData = useAtomValue(isDataAvailable)
+const setShowData = useSetAtom(isDataAvailable)
 
-  useEffect(() => {
-    const fetchEvent = async () => {
-      try {
+useEffect(() => {
+  setShowData(false);
+const fetchEvent = async () =>{
+    try {
         const response = await axios.get("http://localhost:7000/event/all");
         if (response.status === 200) {
           setEvents(response.data);
@@ -83,24 +91,41 @@ export default function Home() {
   };
 
 
-  return (
-    <>
-      {/* Events */}
-      <div className="border-y-2 border-solid p-4">
-        <h1 className="text-[#161C2D] text-3xl font-extrabold text-center m-5">
-          Explore Our Event Showcase
-        </h1>
-        <h1 className="text-[#6c6969] text-lg font-medium text-center ">
-          {" "}
-          A Tapestry of Unforgettable Moments
-        </h1>
-        <div className="my-8 grid grid-cols-1 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
-          {events.map((event) => (
-            <div className="2xl:p-3 p-5">
-              {/* img */}
-              <div
-                className="relative"
-                onClick={() => navigateToProductDetail(event._id)}
+    return (
+        <>
+        <NavBar />
+        { !showData && <div>
+          {/* Carousel */}
+        <div className=" flex flex-col border-b-2 py-8 px-3">
+          <div
+            id="slider"
+            ref={sliderRef}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+        onMouseMove={handleMouseMove}
+            className="w-full h-full overflow-hidden scroll  whitespace-nowrap scroll-smooth">
+            {data.map((item,i) => (
+              <div key={`card-sroll-${i}`} className='p-2 relative 2xl:p-4 xl:p-4  lg:p-4  md:p-4 w-1/2 2xl:w-1/4 xl:w-1/4 lg:w-1/4 md:w-1/4 inline-block cursor-pointer  hover:scale-105 ease-in-out duration-300'
+
+//   return (
+//     <>
+//       {/* Events */}
+//       <div className="border-y-2 border-solid p-4">
+//         <h1 className="text-[#161C2D] text-3xl font-extrabold text-center m-5">
+//           Explore Our Event Showcase
+//         </h1>
+//         <h1 className="text-[#6c6969] text-lg font-medium text-center ">
+//           {" "}
+//           A Tapestry of Unforgettable Moments
+//         </h1>
+//         <div className="my-8 grid grid-cols-1 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
+//           {events.map((event) => (
+//             <div className="2xl:p-3 p-5">
+//               {/* img */}
+//               <div
+//                 className="relative"
+//                 onClick={() => navigateToProductDetail(event._id)}
+
               >
                 <img
                   src={test}
@@ -257,13 +282,29 @@ export default function Home() {
             </button>
           </div>
         </div>
-      </div>
+
+       {/* Events */}
+        <div className="border-y-2 border-solid p-4">
+        <h1 className="text-[#161C2D] text-3xl font-extrabold text-center m-5">Explore Our Event Showcase</h1>
+        <h1 className="text-[#6c6969] text-lg font-medium text-center "> A Tapestry of Unforgettable Moments</h1>
+        <div className="my-8 grid grid-cols-1 2xl:grid-cols-4 xl:grid-cols-4 lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2">
+        {events.map(event => (
+        <EventGrid key={event.id} event={event} />
+        ))}
+        </div>
+       
+        </div>
+        {/* Features */}
+        <div className="m-8">
+        <h1 className="text-[#6F584C] 2xl:text-lg xl:text-lg lg:text-lg md:text-lg sm:text-lg text-sm font-medium text-center">WHY CHOOSE US</h1>
+
+//       </div>
 
       {/* Features */}
-      <div className="m-8">
-        <h1 className="text-[#6F584C] 2xl:text-lg xl:text-lg lg:text-lg md:text-lg sm:text-lg text-sm font-medium text-center">
-          WHY CHOOSE US
-        </h1>
+//       <div className="m-8">
+//         <h1 className="text-[#6F584C] 2xl:text-lg xl:text-lg lg:text-lg md:text-lg sm:text-lg text-sm font-medium text-center">
+//           WHY CHOOSE US
+//         </h1>
         <h1 className="text-[#161C2D] 2xl:text-4xl xl:text-4xl lg:text-4xl md:text-4xl sm:text-4xl text-xl font-bold text-center p-6">
           People choose us because we <br />
           serve the best for everyone
@@ -362,7 +403,10 @@ export default function Home() {
             />
           ))}
         </div>
-      </div>
-    </>
-  );
+      </div> } </>
+        )
 }
+//       </div>
+//     </>
+//   );
+// }

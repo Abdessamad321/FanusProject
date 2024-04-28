@@ -133,9 +133,11 @@ async function allEvents(req, res) {
     }
 
     if (!events || events.length === 0) {
+
       return res
         .status(404)
         .json({ message: "No events found with the specified filter." });
+
     }
 
     res.status(200).json(events);
