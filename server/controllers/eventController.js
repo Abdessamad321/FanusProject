@@ -1,8 +1,8 @@
 const express = require("express");
 const Event = require("../models/event");
+const mongoose = require("mongoose");
 
-
-exports.createEvent = async function (req, res) {
+async function createEvent(req, res) {
   try {
     const {
       name,
@@ -14,13 +14,16 @@ exports.createEvent = async function (req, res) {
       capacity,
       remaining_places,
     } = req.body;
+    const eventPhoto = req.file ? req.file.path : null;
 
     const existingEvent = await Event.findOne({ date, time, location });
 
     if (existingEvent) {
-   return res.status(200).json("Location already reserved for the same date and time!");
+      return res
+        .status(200)
+        .json("Location already reserved for the same date and time!");
     }
- 
+
     const event = new Event({
       name,
       description,
@@ -30,22 +33,24 @@ exports.createEvent = async function (req, res) {
       location,
       capacity,
       remaining_places,
+      event_photo: eventPhoto,
     });
 
     const result = await event.save();
 
     if (result) {
-    res.status(200).json("Event created successfully");
+      res.status(200).json("Event created successfully");
     } else {
-    res.status(400).json("Failed to create event! Please check your input data");
+      res
+        .status(400)
+        .json("Failed to create event! Please check your input data");
     }
-
   } catch (error) {
-    res.status(500).json({error:error});
+    res.status(500).json({ error: error });
   }
-};
+}
 
-exports.updateEvent = async function (req, res) {
+async function updateEvent(req, res) {
   try {
     const { id } = req.params;
     const { body } = req;
@@ -58,9 +63,9 @@ exports.updateEvent = async function (req, res) {
   } catch (error) {
     res.status(500).json({ error: error });
   }
-};
+}
 
-exports.allEvents = async function (req, res) {
+async function allEvents(req, res) {
   try {
     const page = req.query.page || 1;
     const limit = 10;
@@ -121,13 +126,18 @@ exports.allEvents = async function (req, res) {
             location: 1,
             capacity: 1,
             remaining_places: 1,
+            event_photo: 1,
           },
         },
       ]);
     }
 
     if (!events || events.length === 0) {
-      return res.status(200).json({ message: "No events found" });
+
+      return res
+        .status(404)
+        .json({ message: "No events found with the specified filter." });
+
     }
 
     res.status(200).json(events);
@@ -137,9 +147,9 @@ exports.allEvents = async function (req, res) {
       .status(500)
       .json({ error: "Internal server error. Please try again later." });
   }
-};
+}
 
-exports.deleteEvent = async function (req, res) {
+async function deleteEvent(req, res) {
   try {
     const { id } = req.params;
     const event = await Event.findById(id);
@@ -151,9 +161,9 @@ exports.deleteEvent = async function (req, res) {
   } catch (error) {
     res.status(500).json({ error: error });
   }
-};
+}
 
-exports.searchEvent = async function (req, res) {
+async function searchEvent(req, res) {
   try {
     const eventName = req.query.name;
     const eventOwner = req.query.owner;
@@ -179,9 +189,9 @@ exports.searchEvent = async function (req, res) {
     console.error(error);
     res.status(500).json({ error: error.message });
   }
-};
+}
 
-exports.eventByName = async function (req, res) {
+async function eventByName(req, res) {
   const eventName = req.params.name;
   try {
     const event = await Event.findOne({ name: eventName });
@@ -194,12 +204,12 @@ exports.eventByName = async function (req, res) {
     res.status(500).json({ error: error.messsage });
     console.log(error);
   }
-};
+}
 
-exports.eventById = async function (req, res) {
-  const eventId = req.params.id;
+async function eventById(req, res) {
   try {
-    const event = await Event.findById(eventId);
+  const eventId = req.params.id;
+  const event = await Event.findById(eventId);
     if (event) {
       res.status(200).json(event);
     } else {
@@ -209,4 +219,14 @@ exports.eventById = async function (req, res) {
     res.status(500).json({ error: error.messsage });
     console.log(error);
   }
+}
+
+module.exports = { 
+  createEvent: createEvent,
+  allEvents:  allEvents,
+  deleteEvent: deleteEvent,
+  updateEvent: updateEvent,
+  searchEvent: searchEvent,
+  eventByName: eventByName,
+  eventById: eventById
 };

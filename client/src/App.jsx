@@ -11,13 +11,18 @@ import LoginPage from "./Pages/authentification/loginPage.jsx";
 import LandingPage from "./Pages/landingPage/landing.jsx";
 import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
 import ResetPassword from "./components/ForgotPassword/ResetPassword";
+import Deletion from "./Components/menu/security/deletion.jsx";
+import ProductDetail from './Components/oussama/ProductDetail.jsx';
 
+
+import ProductDetails from './Pages/productDetails/productDetails.jsx'
 function App() {
   const authCtx = useContext(Context);
 
   return (
     <>
     {/* <Navbar/> */}
+    {/* <ProductDetails/> */}
       <BrowserRouter>
         <Routes>
         <>
@@ -33,6 +38,8 @@ function App() {
           ) : (
             <>
               <Route path="/*" element={<Profile />} />
+              <Route path="/delete" element={<Deletion />}/>
+              <Route path="/event-detail/:eventId" element={<ProductDetail/>}/>
             </>
           )}
         <Route path="/forgetpassword" element={<ForgotPassword/>} />
@@ -41,8 +48,10 @@ function App() {
         <Footer />
       </BrowserRouter> 
       {/* <ResetPasword /> */}
+
     </>
   );
+  
 }
 
 export default App;

@@ -44,7 +44,7 @@ function PopupMenu({ onClose }) {
         <ul>
           <li onClick={() => handleItemClick("/edit-profile")}>
             <Link
-              className="flex justify-start items-center px-4 py-4 text-center hover:bg-gray-100 border-b border-gray-200 cursor-pointer"
+              className="flex justify-start items-center px-4 py-4 hover:bg-gray-100 rounded-t-md cursor-pointer"
               to="/edit-profile"
             >
               <div className="flex px-2">
@@ -55,7 +55,7 @@ function PopupMenu({ onClose }) {
           </li>
           <li onClick={() => handleItemClick("Reservations")}>
             <Link
-              className="flex justify-start items-center px-4 py-4 text-center hover:bg-gray-100 border-b border-gray-200 cursor-pointer"
+              className="flex justify-start items-center px-4 py-4 hover:bg-gray-100 cursor-pointer"
             >
               <div className="flex px-2">
                 <CalendarOutlined />
@@ -64,7 +64,7 @@ function PopupMenu({ onClose }) {
             </Link>
           </li>
           <li onClick={handleClose}>
-            <Link className="flex justify-start items-center px-4 py-4 text-center hover:bg-gray-100 cursor-pointer">
+            <Link className="flex justify-start items-center px-4 py-4 hover:bg-gray-100 rounded-b-md cursor-pointer">
               <div className="flex px-2">
                 <LogoutOutlined />
               </div>
