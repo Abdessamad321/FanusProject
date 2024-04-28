@@ -648,11 +648,10 @@ module.exports = {
   profileCustomer: profileCustomer,
   refreshTokens: refreshTokens,
 
-  // resetRquist:resetRquist,
+  // resetRquist: resetRquist,
   forgetPassword: forgetPassword,
-  resetPassword:resetPassword
+  resetPassword:resetPassword,
 
-  resetRquist: resetRquist,
 //   verifyResetToken: verifyResetToken,
   // changePass: changePass,
   setNewPass: setNewPass,

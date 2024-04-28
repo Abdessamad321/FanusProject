@@ -43,7 +43,7 @@ router.post("/delete-email", customerControllers.deletionEmail);
 router.post("/refresh/token", customerControllers.refreshTokens);
 
 
-router.post('/password/reset', customerControllers.resetRquist);
+// router.post('/password/reset', customerControllers.resetRquist);
 
 // router.get('/password/reset/verify/:token', customerControllers.verifyResetToken);
 

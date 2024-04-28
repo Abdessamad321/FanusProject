@@ -1,16 +1,16 @@
 import React, { useState, useContext } from "react";
 import "./App.css";
-import Navbar from "../src/components/Navbar/NavBar";
+import Navbar from "../src/Components/Navbar/NavBar";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Profile from "./Pages/profile/profile.jsx";
-import Footer from "../src/components/Footer/Footer";
-import { Context } from "../src/components/LoginContext/LoginContext";
+import Footer from "../src/Components/Footer/Footer";
+import { Context } from "../src/Components/LoginContext/LoginContext";
 import RegisterPage from "./Pages/authentification/registerPage.jsx";
 import HomePage from "./Pages/home/homePage.jsx";
 import LoginPage from "./Pages/authentification/loginPage.jsx";
 import LandingPage from "./Pages/landingPage/landing.jsx";
-import ForgotPassword from "./components/ForgotPassword/ForgotPassword";
-import ResetPassword from "./components/ForgotPassword/ResetPassword";
+import ForgotPassword from "./Components/ForgotPassword/ForgotPassword";
+import ResetPassword from "./Components/ForgotPassword/ResetPassword";
 import Deletion from "./Components/menu/security/deletion.jsx";
 import ProductDetail from './Components/oussama/ProductDetail.jsx';
 
@@ -21,10 +21,10 @@ function App() {
 
   return (
     <>
-    {/* <Navbar/> */}
+    
     {/* <ProductDetails/> */}
       <BrowserRouter>
-        <Routes>
+        <Navbar/><Routes>
         <>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/create" element={<RegisterPage />} />

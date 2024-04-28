@@ -10,7 +10,7 @@ import { monthOptions, countries } from "./data";
 import Select from "react-select";
 
 import { TextInput } from "../inputs/inputs";
-import { Dropdown } from "../../components/dropdowns/dropdown";
+import { Dropdown } from "../../Components/dropdowns/dropdown";
 
 function EditProfile() {
   const authContext = useContext(Context);

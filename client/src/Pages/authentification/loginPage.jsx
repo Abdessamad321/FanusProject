@@ -12,7 +12,7 @@ import {
   EyeInvisibleFilled,
   CloseOutlined,
 } from "@ant-design/icons";
-import { Context } from "../../components/LoginContext/LoginContext";
+import { Context } from "../../Components/LoginContext/LoginContext";
 
 function Login() {
   const [isLogin, setIsLogin] = useState(true);

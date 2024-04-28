@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../LoginContext/LoginContext";
-import { Calendar } from "../../components/ui/calendar";
+import { Calendar } from "../../Components/ui/calendar";
 import EventGrid from "../EventGrid/EventGrid";
 import Settings from '../settings/settings';
 import { ToastContainer, toast } from "react-toastify";
@@ -14,9 +14,6 @@ import { FaRegHeart } from "react-icons/fa6";
 import { CgProfile } from "react-icons/cg";
 import { useSetAtom } from 'jotai'
 import { isDataAvailable } from "@/lib/states";
-
-
-
 
 export default function NavBar() {
 

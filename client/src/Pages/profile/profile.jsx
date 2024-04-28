@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
-import Sidebar from "../../components/SideBar/SideBar";
-import EditProfile from "../../components/menu/editProfile";
-import Notifications from "../../components/menu/notifications";
-import Security from "../../components/menu/security/security";
-import Appearance from "../../components/menu/appearance";
-import Help from "../../components/menu/help";
+import Sidebar from "../../Components/SideBar/SideBar";
+import EditProfile from "../../Components/menu/editProfile";
+import Notifications from "../../Components/menu/notifications";
+import Security from "../../Components/menu/security/security";
+import Appearance from "../../Components/menu/appearance";
+import Help from "../../Components/menu/help";
 
 function Profile() {
   const [selectedItem, setSelectedItem] = useState("");
